@@ -21,6 +21,29 @@ import React, { useState } from "react";
 
 
 
+const RoadDivider = () => {
+  return (
+    <div className="h-10 bg-dhaba-dark relative overflow-hidden flex items-center shadow-xl">
+      {/* Edge lines */}
+      <div className="absolute top-0 w-full h-[1px] bg-white/10" />
+      <div className="absolute bottom-0 w-full h-[1px] bg-white/10" />
+      
+      {/* Center dash lines */}
+      <div className="w-full flex justify-around items-center px-4">
+        {[...Array(15)].map((_, i) => (
+          <div 
+            key={i} 
+            className="w-16 h-1.5 bg-dhaba-mustard/90 rounded-sm shadow-[0_0_8px_rgba(234,179,8,0.4)]" 
+          />
+        ))}
+      </div>
+      
+      {/* Road grain effect */}
+      <div className="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(circle,white_1px,transparent_1px)] bg-[length:4px_4px]" />
+    </div>
+  );
+};
+
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -380,12 +403,12 @@ const BrandCard = ({ brand }: BrandCardProps) => {
       </div>
 
       {/* Content */}
-      <div className="absolute inset-0 p-8 flex flex-col justify-end pointer-events-none text-left">
+      <div className="absolute inset-0 p-7 flex flex-col justify-end pointer-events-none text-left">
         <motion.div 
-          className="transition-transform duration-500 group-hover:-translate-y-10"
+          className="transition-transform duration-500"
         >
           {/* Fixed height container for the title ensures baseline alignment */}
-          <div className="min-h-[4rem] flex flex-col justify-end mb-1">
+          <div className="min-h-[4rem] flex flex-col justify-end transition-transform duration-500 group-hover:-translate-y-2 mb-1">
             <h4 className="font-display font-bold text-lg sm:text-xl text-white drop-shadow-2xl leading-tight tracking-tight">
               {brand.name}
             </h4>
@@ -447,7 +470,7 @@ const Brands = () => {
   ];
 
   return (
-    <section className="py-32 bg-dhaba-cream border-y-8 border-dhaba-dark overflow-hidden">
+    <section className="py-32 bg-dhaba-cream overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-24">
           <span className="font-serif italic text-dhaba-red text-2xl">Premium Amenities</span>
@@ -534,7 +557,7 @@ const Location = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-dhaba-dark text-white py-20 border-t-8 border-dhaba-red">
+    <footer className="bg-dhaba-dark text-white py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-4 gap-16 mb-16">
           <div className="col-span-2">
@@ -596,9 +619,13 @@ export default function App() {
       <main>
         <Hero />
         <Brands />
+        <RoadDivider />
         <Highlights />
+        <RoadDivider />
         <LoungeSection />
+        <RoadDivider />
         <GroupBookings />
+        <RoadDivider />
         <Location />
       </main>
       <Footer />
