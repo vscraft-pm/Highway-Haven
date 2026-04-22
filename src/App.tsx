@@ -1,16 +1,16 @@
 import { motion, useMotionValue, useTransform, useSpring, AnimatePresence } from "motion/react";
-import { 
-  MapPin, 
-  Clock, 
-  Phone, 
-  Star, 
-  ParkingCircle, 
-  Zap, 
-  Bath, 
-  Coffee, 
-  Users, 
-  Briefcase, 
-  Bed, 
+import {
+  MapPin,
+  Clock,
+  Phone,
+  Star,
+  ParkingCircle,
+  Zap,
+  Bath,
+  Coffee,
+  Users,
+  Briefcase,
+  Bed,
   UtensilsCrossed,
   ChevronRight,
   ChevronDown,
@@ -18,7 +18,10 @@ import {
   Menu as MenuIcon,
   Sparkles,
   ChefHat,
-  Flame
+  Flame,
+  FlameKindling,
+  Drumstick,
+  Soup
 } from "lucide-react";
 import React, { useState } from "react";
 
@@ -30,17 +33,17 @@ const RoadDivider = () => {
       {/* Edge lines */}
       <div className="absolute top-0 w-full h-[1px] bg-white/10" />
       <div className="absolute bottom-0 w-full h-[1px] bg-white/10" />
-      
+
       {/* Center dash lines */}
       <div className="w-full flex justify-center gap-10 md:gap-14 items-center px-4 overflow-hidden">
         {[...Array(30)].map((_, i) => (
-          <div 
-            key={i} 
-            className="w-12 md:w-16 h-1 bg-dhaba-mustard/90 rounded-full shadow-[0_0_8px_rgba(234,179,8,0.4)] flex-shrink-0" 
+          <div
+            key={i}
+            className="w-12 md:w-16 h-1 bg-dhaba-mustard/90 rounded-full shadow-[0_0_8px_rgba(234,179,8,0.4)] flex-shrink-0"
           />
         ))}
       </div>
-      
+
       {/* Road grain effect */}
       <div className="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(circle,white_1px,transparent_1px)] bg-[length:4px_4px]" />
     </div>
@@ -87,11 +90,11 @@ const ReviewsMarquee = () => {
 
       {/* Decorative background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-white/5 blur-[120px] pointer-events-none" />
-      
+
       <div className="flex flex-col gap-10 pointer-events-none">
         {/* Row 1 */}
         <div className="relative">
-          <motion.div 
+          <motion.div
             animate={{ x: [0, -1920] }}
             transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
             className="flex whitespace-nowrap gap-10"
@@ -101,10 +104,10 @@ const ReviewsMarquee = () => {
             ))}
           </motion.div>
         </div>
-        
+
         {/* Row 2 */}
         <div className="relative">
-          <motion.div 
+          <motion.div
             animate={{ x: [-1920, 0] }}
             transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
             className="flex whitespace-nowrap gap-10"
@@ -123,10 +126,20 @@ const ReviewsMarquee = () => {
   );
 };
 
+const fbBrands = [
+  "Chokhi Dhani",
+  "Three Sixty Lux",
+  "Uttham",
+  "Chaayos",
+  "Naivedyam",
+  "Blue Tokai Coffee",
+];
+
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [mobileRetailOpen, setMobileRetailOpen] = useState(false);
+  const [mobileFbOpen, setMobileFbOpen] = useState(false);
 
   return (
     <nav className="sticky top-0 z-50 bg-white text-dhaba-dark border-b-4 border-dhaba-mustard shadow-sm">
@@ -135,34 +148,52 @@ const Nav = () => {
           <div className="flex items-center">
             <img src="/hh-logo.png" alt="Highway Haven Logo" className="h-16 w-auto object-contain" />
           </div>
-          
+
           <div className="hidden md:flex items-center gap-8 font-sans font-bold text-sm tracking-widest">
             <a href="#groups" className="hover:text-dhaba-red transition-colors">Group bookings</a>
-            <a href="#brands" className="hover:text-dhaba-red transition-colors">F&b</a>
             <div className="relative group">
               <button className="flex items-center gap-1 hover:text-dhaba-red transition-colors">
-                Retail <ChevronDown size={14} />
+                F&B <ChevronDown size={14} className="transition-transform duration-300 group-hover:rotate-180" />
               </button>
-              <div className="absolute top-full left-0 pt-4 hidden group-hover:block w-56 transition-all z-50">
-                <div className="bg-white border-2 border-dhaba-dark rounded-xl shadow-2xl p-2 flex flex-col gap-1 overflow-hidden">
-                  <a href="#brands" className="px-4 py-3 hover:bg-dhaba-mustard rounded-lg transition-colors text-xs font-bold tracking-widest border-b border-dhaba-dark/5 last:border-0 hover:text-dhaba-dark text-dhaba-dark/80">Leather 360</a>
+              <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <div className="bg-white border-2 border-dhaba-dark/10 rounded-2xl shadow-2xl p-3 w-64 flex flex-col gap-0.5 overflow-hidden backdrop-blur-sm">
+                  {fbBrands.map((brand, i) => (
+                    <a
+                      key={brand}
+                      href="#brands"
+                      className="px-4 py-2.5 hover:bg-dhaba-mustard/20 hover:pl-6 rounded-xl transition-all duration-200 text-xs font-bold tracking-widest text-dhaba-dark/70 hover:text-dhaba-red border-b border-dhaba-dark/5 last:border-0"
+                      style={{ animationDelay: `${i * 40}ms` }}
+                    >
+                      {brand}
+                    </a>
+                  ))}
                 </div>
               </div>
             </div>
             <div className="relative group">
               <button className="flex items-center gap-1 hover:text-dhaba-red transition-colors">
-                Services <ChevronDown size={14} />
+                Retail <ChevronDown size={14} className="transition-transform duration-300 group-hover:rotate-180" />
               </button>
-              <div className="absolute top-full left-0 pt-4 hidden group-hover:block w-56 transition-all z-50">
-                <div className="bg-white border-2 border-dhaba-dark rounded-xl shadow-2xl p-2 flex flex-col gap-1 overflow-hidden">
-                  <a href="#highlights" className="px-4 py-3 hover:bg-dhaba-mustard rounded-lg transition-colors text-xs font-bold tracking-widest border-b border-dhaba-dark/5 last:border-0 hover:text-dhaba-dark text-dhaba-dark/80">Ev charging</a>
-                  <a href="#brands" className="px-4 py-3 hover:bg-dhaba-mustard rounded-lg transition-colors text-xs font-bold tracking-widest border-b border-dhaba-dark/5 last:border-0 hover:text-dhaba-dark text-dhaba-dark/80">Guardian pharmacy</a>
+              <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <div className="bg-white border-2 border-dhaba-dark/10 rounded-2xl shadow-2xl p-3 w-56 flex flex-col gap-0.5 overflow-hidden">
+                  <a href="#brands" className="px-4 py-2.5 hover:bg-dhaba-mustard/20 hover:pl-6 rounded-xl transition-all duration-200 text-xs font-bold tracking-widest text-dhaba-dark/70 hover:text-dhaba-red">Leather 360</a>
                 </div>
               </div>
             </div>
-            <a 
-              href="https://www.google.com/maps/place/HIGHWAY+HAVEN/@29.1562933,77.0342687,17z/data=!3m1!4b1!4m6!3m5!1s0x390dc900750c276f:0x3848e514f5da0fc4!8m2!3d29.1562933!4d77.0342687!16s%2Fg%2F11wwhd7gjp?entry=ttu&g_ep=EgoyMDI2MDQwMS4wIKXMDSoASAFQAw%3D%3D" 
-              target="_blank" 
+            <div className="relative group">
+              <button className="flex items-center gap-1 hover:text-dhaba-red transition-colors">
+                Services <ChevronDown size={14} className="transition-transform duration-300 group-hover:rotate-180" />
+              </button>
+              <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <div className="bg-white border-2 border-dhaba-dark/10 rounded-2xl shadow-2xl p-3 w-56 flex flex-col gap-0.5 overflow-hidden">
+                  <a href="#highlights" className="px-4 py-2.5 hover:bg-dhaba-mustard/20 hover:pl-6 rounded-xl transition-all duration-200 text-xs font-bold tracking-widest text-dhaba-dark/70 hover:text-dhaba-red border-b border-dhaba-dark/5">Ev charging</a>
+                  <a href="#brands" className="px-4 py-2.5 hover:bg-dhaba-mustard/20 hover:pl-6 rounded-xl transition-all duration-200 text-xs font-bold tracking-widest text-dhaba-dark/70 hover:text-dhaba-red">Guardian pharmacy</a>
+                </div>
+              </div>
+            </div>
+            <a
+              href="https://www.google.com/maps/place/HIGHWAY+HAVEN/@29.1562933,77.0342687,17z/data=!3m1!4b1!4m6!3m5!1s0x390dc900750c276f:0x3848e514f5da0fc4!8m2!3d29.1562933!4d77.0342687!16s%2Fg%2F11wwhd7gjp?entry=ttu&g_ep=EgoyMDI2MDQwMS4wIKXMDSoASAFQAw%3D%3D"
+              target="_blank"
               rel="noopener noreferrer"
               className="bg-dhaba-mustard text-dhaba-dark px-6 py-2 rounded-full font-display hover:bg-dhaba-red hover:text-white transition-all border-2 border-dhaba-dark shadow-md flex items-center justify-center"
             >
@@ -180,15 +211,37 @@ const Nav = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="md:hidden bg-white border-t-4 border-dhaba-mustard p-4 flex flex-col gap-4 font-display text-xl text-center shadow-xl"
         >
           <a href="#groups" className="text-dhaba-dark hover:text-dhaba-red" onClick={() => setIsOpen(false)}>Group bookings</a>
-          <a href="#brands" className="text-dhaba-dark hover:text-dhaba-red" onClick={() => setIsOpen(false)}>F&b</a>
           <div className="flex flex-col gap-2 items-center">
-            <button 
+            <button
+              onClick={() => setMobileFbOpen(!mobileFbOpen)}
+              className="flex items-center gap-2 text-dhaba-dark hover:text-dhaba-red"
+            >
+              F&B <ChevronDown size={20} className={mobileFbOpen ? "rotate-180 transition-transform" : "transition-transform"} />
+            </button>
+            <AnimatePresence>
+              {mobileFbOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="flex flex-col gap-3 bg-dhaba-cream/30 p-4 rounded-2xl w-full overflow-hidden"
+                >
+                  {fbBrands.map((brand) => (
+                    <a key={brand} href="#brands" className="text-base font-bold text-dhaba-dark/70 hover:text-dhaba-red" onClick={() => setIsOpen(false)}>{brand}</a>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+          <div className="flex flex-col gap-2 items-center">
+            <button
               onClick={() => setMobileRetailOpen(!mobileRetailOpen)}
               className="flex items-center gap-2 text-dhaba-dark hover:text-dhaba-red"
             >
@@ -196,7 +249,7 @@ const Nav = () => {
             </button>
             <AnimatePresence>
               {mobileRetailOpen && (
-                <motion.div 
+                <motion.div
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
@@ -208,7 +261,7 @@ const Nav = () => {
             </AnimatePresence>
           </div>
           <div className="flex flex-col gap-2 items-center">
-            <button 
+            <button
               onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
               className="flex items-center gap-2 text-dhaba-dark hover:text-dhaba-red"
             >
@@ -216,7 +269,7 @@ const Nav = () => {
             </button>
             <AnimatePresence>
               {mobileServicesOpen && (
-                <motion.div 
+                <motion.div
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
@@ -228,9 +281,9 @@ const Nav = () => {
               )}
             </AnimatePresence>
           </div>
-          <a 
-            href="https://www.google.com/maps/place/HIGHWAY+HAVEN/@29.1562933,77.0342687,17z/data=!3m1!4b1!4m6!3m5!1s0x390dc900750c276f:0x3848e514f5da0fc4!8m2!3d29.1562933!4d77.0342687!16s%2Fg%2F11wwhd7gjp?entry=ttu&g_ep=EgoyMDI2MDQwMS4wIKXMDSoASAFQAw%3D%3D" 
-            target="_blank" 
+          <a
+            href="https://www.google.com/maps/place/HIGHWAY+HAVEN/@29.1562933,77.0342687,17z/data=!3m1!4b1!4m6!3m5!1s0x390dc900750c276f:0x3848e514f5da0fc4!8m2!3d29.1562933!4d77.0342687!16s%2Fg%2F11wwhd7gjp?entry=ttu&g_ep=EgoyMDI2MDQwMS4wIKXMDSoASAFQAw%3D%3D"
+            target="_blank"
             rel="noopener noreferrer"
             className="bg-dhaba-mustard text-dhaba-dark px-6 py-3 rounded-xl border-2 border-dhaba-dark hover:bg-dhaba-red hover:text-white transition-all shadow-md flex items-center justify-center"
           >
@@ -270,9 +323,9 @@ const Hero = () => {
             transition={{ duration: 1.5, ease: "easeOut" }}
             className="absolute inset-0"
           >
-            <img 
-              src={slides[currentSlide]} 
-              alt={`Slide ${currentSlide + 1}`} 
+            <img
+              src={slides[currentSlide]}
+              alt={`Slide ${currentSlide + 1}`}
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />
@@ -283,7 +336,7 @@ const Hero = () => {
       </div>
 
       <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
@@ -298,7 +351,7 @@ const Hero = () => {
           <p className="font-sans text-xl text-dhaba-cream/90 mb-10 max-w-xl leading-relaxed">
             Forget dusty stops. Welcome to a sanctuary of comfort, premium brands, and world-class amenities right on NH-1.
           </p>
-          
+
           <div className="flex flex-wrap gap-4">
             <button className="bg-dhaba-mustard text-dhaba-dark px-8 py-4 rounded-xl font-display text-xl border-2 border-dhaba-dark hover:scale-105 transition-all flex items-center gap-2 group shadow-xl">
               EXPLORE AMENITIES <ChevronRight className="group-hover:translate-x-1 transition-transform" />
@@ -324,13 +377,13 @@ const Hero = () => {
       </div>
 
       {/* Floating Badge */}
-      <motion.div 
+      <motion.div
         animate={{ rotate: [0, 5, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
         className="absolute bottom-10 right-10 hidden lg:block"
       >
         <div className="bg-dhaba-red p-8 rounded-full shadow-2xl shadow-dhaba-red/20 transform rotate-6">
-          <p className="font-display text-dhaba-mustard text-center text-3xl leading-tight">OPEN<br/>24/7</p>
+          <p className="font-display text-dhaba-mustard text-center text-3xl leading-tight">OPEN<br />24/7</p>
         </div>
       </motion.div>
     </section>
@@ -339,21 +392,21 @@ const Hero = () => {
 
 const Highlights = () => {
   const highlights = [
-    { 
-      title: "Ample Parking", 
-      icon: <ParkingCircle size={48} />, 
+    {
+      title: "Ample Parking",
+      icon: <ParkingCircle size={48} />,
       desc: "Large, secure parking area designed for cars, buses, and modern travelers. 24/7 surveillance for your peace of mind.",
       img: "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?q=80&w=1000&auto=format&fit=crop"
     },
-    { 
-      title: "EV Charging", 
-      icon: <Zap size={48} />, 
+    {
+      title: "EV Charging",
+      icon: <Zap size={48} />,
       desc: "Ultra-fast DC charging stations for all electric vehicles. Recharge your car while you recharge yourself.",
       img: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?q=80&w=1000&auto=format&fit=crop"
     },
-    { 
-      title: "Pristine Bathrooms", 
-      icon: <Bath size={48} />, 
+    {
+      title: "Pristine Bathrooms",
+      icon: <Bath size={48} />,
       desc: "Exceptionally clean, hotel-quality washrooms designed for maximum comfort during your journey.",
       img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1000&auto=format&fit=crop"
     }
@@ -362,17 +415,17 @@ const Highlights = () => {
   return (
     <section id="highlights" className="py-24 bg-dhaba-mustard relative overflow-hidden">
       <div className="dhaba-pattern absolute inset-0 opacity-10"></div>
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-20">
           <span className="font-serif italic text-dhaba-red text-2xl">Why Stop Here?</span>
-          <h2 className="font-display text-5xl md:text-7xl text-dhaba-dark mt-2 tracking-tight uppercase">WORLD-CLASS COMFORT</h2>
+          <h2 className="font-display text-5xl md:text-7xl text-dhaba-dark mt-2 tracking-tight uppercase">WORLD CLASS COMFORT & AMENITIES</h2>
           <div className="w-32 h-1.5 bg-dhaba-red mx-auto mt-6 rounded-full shadow-lg"></div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {highlights.map((item, idx) => (
-            <motion.div 
+            <motion.div
               key={idx}
               whileHover={{ y: -10 }}
               className="bg-white rounded-[40px] overflow-hidden border-4 border-dhaba-red shadow-2xl group relative"
@@ -406,48 +459,52 @@ const LoungeSection = () => {
   ];
 
   return (
-    <section id="lounge" className="py-24 bg-dhaba-mustard text-dhaba-dark relative overflow-hidden">
+    <section id="lounge" className="py-24 bg-gradient-to-br from-[#B91C1C] via-dhaba-red to-[#991B1B] text-white relative overflow-hidden">
       <div className="absolute top-0 right-0 p-12 opacity-10">
         <Sparkles size={200} />
       </div>
-      
+      <div className="absolute inset-0 opacity-10 dhaba-pattern pointer-events-none" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-12 lg:gap-20 items-center">
           <div className="text-center lg:text-left">
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl mb-8 tracking-tight leading-[1.1] text-dhaba-dark">
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl mb-8 tracking-tight leading-[1.1] text-white">
               <span className="block lg:whitespace-nowrap uppercase">FIRST HIGHWAY PITSTOP</span>
-              <span className="block lg:whitespace-nowrap uppercase">TO OFFER A <span className="text-dhaba-red font-serif italic lowercase">lounge</span></span>
+              <span className="block lg:whitespace-nowrap uppercase">TO OFFER A <span className="text-dhaba-mustard font-serif italic lowercase">lounge</span></span>
             </h2>
-            <p className="text-dhaba-dark/70 text-lg md:text-xl mb-12 leading-relaxed font-medium max-w-lg mx-auto lg:mx-0">
+            <div className="inline-flex items-center gap-2 bg-dhaba-mustard text-dhaba-dark px-5 py-2 rounded-full font-display text-xs mb-6 border border-dhaba-dark/20 shadow-xl uppercase tracking-[0.2em]">
+              GT Road First Airport Style Lounge
+            </div>
+            <p className="text-dhaba-cream/80 text-lg md:text-xl mb-12 leading-relaxed font-medium max-w-lg mx-auto lg:mx-0">
               Experience our premium sanctuary designed for the discerning traveler. A place to rest, work, and dine in absolute luxury.
             </p>
-            
+
             <div className="mt-12 max-w-3xl mx-auto lg:mx-0">
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
                 {facilities.map((f, idx) => (
-                  <div 
-                    key={idx} 
-                    className="p-6 rounded-[32px] bg-white/40 border border-dhaba-dark/5 flex flex-col items-start text-left group transition-all hover:bg-white shadow-xl hover:-translate-y-1"
+                  <div
+                    key={idx}
+                    className="p-6 rounded-[32px] bg-white/5 border border-white/10 flex flex-col items-start text-left group transition-all hover:bg-white/10 shadow-xl hover:-translate-y-1"
                   >
-                    <div className="text-dhaba-red mb-4">
+                    <div className="text-dhaba-mustard mb-4">
                       {React.cloneElement(f.icon as React.ReactElement, { size: 28, strokeWidth: 2 })}
                     </div>
                     <div>
-                      <h4 className="font-display text-xs font-bold uppercase tracking-widest text-dhaba-dark mb-1">{f.name}</h4>
-                      <p className="text-dhaba-dark/40 text-[9px] uppercase tracking-wider font-bold">{f.desc}</p>
+                      <h4 className="font-display text-xs font-bold uppercase tracking-widest text-white mb-1">{f.name}</h4>
+                      <p className="text-dhaba-mustard/60 text-[9px] uppercase tracking-wider font-bold">{f.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-          
+
           <div className="relative">
-            <div className="relative p-1 bg-[repeating-linear-gradient(45deg,#BC3030,#BC3030_10px,#white_10px,#white_20px)] rounded-[44px] shadow-2xl overflow-hidden">
-              <div className="rounded-[40px] overflow-hidden relative h-[600px] border-4 border-dhaba-red">
-                <img 
-                  src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop" 
-                  alt="Luxury Lounge Preview" 
+            <div className="relative p-1 bg-[repeating-linear-gradient(45deg,#EAB308,#EAB308_10px,#fff_10px,#fff_20px)] rounded-[44px] shadow-2xl overflow-hidden">
+              <div className="rounded-[40px] overflow-hidden relative h-[600px] border-4 border-dhaba-mustard">
+                <img
+                  src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop"
+                  alt="Luxury Lounge Preview"
                   className="w-full h-full object-cover opacity-80"
                   referrerPolicy="no-referrer"
                 />
@@ -468,63 +525,294 @@ const LoungeSection = () => {
 
 const JugniSection = () => {
   return (
-    <section id="jugni" className="py-24 bg-gradient-to-br from-[#B91C1C] via-dhaba-red to-[#991B1B] text-white relative overflow-hidden">
-      {/* Texture & Glow */}
+    <section id="jugni" className="py-24 bg-dhaba-mustard text-dhaba-dark relative overflow-hidden">
       <div className="absolute inset-0 opacity-10 dhaba-pattern pointer-events-none" />
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/5 rounded-full blur-[120px] -mr-48 -mt-48 pointer-events-none" />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
           <div className="lg:w-1/2 order-2 lg:order-1 hidden lg:block">
             <div className="relative group">
-              <div className="absolute -inset-4 bg-dhaba-mustard/10 rounded-[48px] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative rounded-[40px] overflow-hidden border-8 border-white/10 shadow-2xl aspect-square">
-                <img 
-                   src="https://images.unsplash.com/photo-1626777552726-4a6b54c97eb4?q=80&w=1200&auto=format&fit=crop" 
-                   alt="Jugni Specialty Non-Veg" 
-                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                   referrerPolicy="no-referrer"
+              <div className="absolute -inset-4 bg-dhaba-red/10 rounded-[48px] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative rounded-[40px] overflow-hidden border-8 border-dhaba-dark/10 shadow-2xl aspect-square">
+                <img
+                  src="https://i0.wp.com/experiencesofagastronomad.com/wp-content/uploads/2013/04/Robibarer-Murgir-Jhol-1-of-1-2.jpg?resize=650%2C979&ssl=1"
+                  alt="Jugni Specialty Non-Veg"
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-dhaba-dark/60 via-transparent to-transparent" />
                 <div className="absolute bottom-10 left-10 hidden md:block">
                   <p className="font-serif italic text-white text-2xl drop-shadow-lg">Traditional Recipes,</p>
-                  <p className="font-display text-4xl text-dhaba-mustard tracking-widest uppercase drop-shadow-2xl">Modern Flavor</p>
+                  <p className="font-display text-4xl text-dhaba-red tracking-widest uppercase drop-shadow-2xl">Modern Flavor</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="lg:w-1/2 order-1 lg:order-2 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 bg-dhaba-mustard text-dhaba-dark px-5 py-2 rounded-full font-display text-xs mb-8 border border-dhaba-dark/20 shadow-xl uppercase tracking-[0.2em]">
-              <Flame size={14} className="fill-dhaba-dark" /> Legend of NH-1
+            <div className="inline-flex items-center gap-2 bg-dhaba-red text-white px-5 py-2 rounded-full font-display text-xs mb-8 border border-dhaba-dark/20 shadow-xl uppercase tracking-[0.2em]">
+              <Flame size={14} className="fill-white" /> Legend of NH-1
             </div>
-            <h2 className="font-display text-7xl md:text-9xl mb-8 tracking-tighter leading-none text-white drop-shadow-sm">JUGNI</h2>
-            <p className="text-dhaba-cream/80 text-lg md:text-xl mb-12 leading-relaxed font-medium max-w-lg mx-auto lg:mx-0">
-              Discover the soul of North Indian meat artistry. Jugni is our dedicated sanctuary for non-veg aficionados, serving legendary slow-cooked curries and sizzling charcoal grills.
+            <h2 className="font-display text-7xl md:text-9xl mb-8 tracking-tighter leading-none text-dhaba-dark drop-shadow-sm">JUGNI</h2>
+            <p className="text-dhaba-dark/70 text-lg md:text-xl mb-12 leading-relaxed font-medium max-w-lg mx-auto lg:mx-0">
+              Discover the soul of North Indian meat artistry. Jugni is our dedicated sanctuary for non-veg aficionados, serving legendary slow-cooked curries and sizzling charcoal grills & All Time Favourite Parathas
             </p>
-            
+
             <div className="grid grid-cols-2 gap-6 max-w-lg mx-auto lg:mx-0">
-              <div className="p-7 rounded-[32px] bg-white/5 border border-white/10 flex flex-col items-center lg:items-start text-center lg:text-left shadow-sm">
-                <div className="p-4 bg-dhaba-mustard text-dhaba-dark rounded-2xl shadow-lg mb-5">
+              <div className="p-7 rounded-[32px] bg-white/40 border border-dhaba-dark/5 flex flex-col items-center lg:items-start text-center lg:text-left shadow-sm hover:bg-white transition-all">
+                <div className="p-4 bg-dhaba-red text-white rounded-2xl shadow-lg mb-5">
                   <UtensilsCrossed size={24} />
                 </div>
                 <div>
-                  <h4 className="font-display text-sm font-bold uppercase tracking-widest text-white mb-1">Hand-Pounded</h4>
-                  <p className="text-dhaba-mustard/60 text-[10px] uppercase font-bold tracking-wider">Spices and Masalas</p>
+                  <h4 className="font-display text-sm font-bold uppercase tracking-widest text-dhaba-dark mb-1">Hand-Pounded</h4>
+                  <p className="text-dhaba-red/60 text-[10px] uppercase font-bold tracking-wider">Spices and Masalas</p>
                 </div>
               </div>
-              <div className="p-7 rounded-[32px] bg-white/5 border border-white/10 flex flex-col items-center lg:items-start text-center lg:text-left shadow-sm">
-                <div className="p-4 bg-white/10 text-dhaba-mustard rounded-2xl shadow-lg mb-5">
+              <div className="p-7 rounded-[32px] bg-white/40 border border-dhaba-dark/5 flex flex-col items-center lg:items-start text-center lg:text-left shadow-sm hover:bg-white transition-all">
+                <div className="p-4 bg-dhaba-dark/10 text-dhaba-red rounded-2xl shadow-lg mb-5">
                   <Star size={24} fill="currentColor" />
                 </div>
                 <div>
-                  <h4 className="font-display text-sm font-bold uppercase tracking-widest text-white mb-1">Premium Cuts</h4>
-                  <p className="text-dhaba-mustard/60 text-[10px] uppercase font-bold tracking-wider">Farm to Highway</p>
+                  <h4 className="font-display text-sm font-bold uppercase tracking-widest text-dhaba-dark mb-1">Premium Cuts</h4>
+                  <p className="text-dhaba-red/60 text-[10px] uppercase font-bold tracking-wider">Farm to Highway</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+      </div>
+    </section>
+  );
+};
+
+const JugniFoodGallery = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const foodImages = [
+    "/foods/GALLERY2.jpg",
+    "/foods/GALLERY5.jpg",
+    "/foods/GALLERY8.jpg",
+    "/foods/download (1).jpg",
+    "/foods/download (3).jpg",
+   
+    "/foods/download (5).jpg",
+  ];
+
+  // Get 5 images for the composition: active one + next 4
+  const getCompositionImages = () => {
+    return [
+      foodImages[activeIndex],
+      foodImages[(activeIndex + 1) % foodImages.length],
+      foodImages[(activeIndex + 2) % foodImages.length],
+      foodImages[(activeIndex + 3) % foodImages.length],
+      foodImages[(activeIndex + 4) % foodImages.length],
+    ];
+  };
+
+  const compImages = getCompositionImages();
+
+  return (
+    <section
+      className="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden"
+      style={{ backgroundColor: "#EAB308" }}
+    >
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-black/15 rounded-full blur-[200px]" />
+        <div className="absolute bottom-0 left-0 w-[40%] h-[40%] bg-dhaba-mustard/5 rounded-full blur-[180px]" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[60vh]">
+          <div className="text-center lg:text-left order-2 lg:order-1">
+            <motion.div
+              initial={{ opacity: 0, x: -60 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <span className="font-serif italic text-dhaba-red/60 text-base md:text-lg tracking-[0.3em] uppercase block mb-6">The Art of Flavour</span>
+              <h2 className="font-display text-6xl sm:text-7xl md:text-[8rem] text-dhaba-dark leading-[0.85] tracking-tighter uppercase mb-8">
+                TASTE<br />
+                <span className="font-serif italic text-dhaba-red font-normal">the</span><br />
+                FIRE
+              </h2>
+              <div className="w-16 h-[1px] bg-dhaba-dark/20 mb-8 mx-auto lg:mx-0" />
+              <p className="text-dhaba-dark/60 text-sm md:text-base leading-relaxed max-w-sm mx-auto lg:mx-0 font-sans">
+                Slow-cooked over charcoal, spiced by hand, and served with soul. This is highway dining, reimagined.
+              </p>
+            </motion.div>
+          </div>
+
+          <div className="relative order-1 lg:order-2">
+            <div className="relative w-full aspect-square max-w-[500px] mx-auto">
+              {/* Main Image */}
+              <motion.div
+                key={`main-${compImages[0]}`}
+                initial={{ opacity: 0, scale: 0.8, rotate: -4 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute inset-[5%] rounded-[2.5rem] overflow-hidden shadow-[0_40px_80px_-20px_rgba(0,0,0,0.6)] z-30 group"
+              >
+                <img
+                  src={compImages[0]}
+                  alt="Jugni hero dish"
+                  className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+              </motion.div>
+
+              {/* Side Images */}
+              <motion.div
+                key={`side1-${compImages[1]}`}
+                initial={{ opacity: 0, scale: 0.8, rotate: 6 }}
+                animate={{ opacity: 1, scale: 1, rotate: 8 }}
+                transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute top-[-8%] right-[-8%] w-[55%] h-[60%] rounded-[2rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] z-20 group"
+              >
+                <img
+                  src={compImages[1]}
+                  alt="Jugni dish"
+                  className="w-full h-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              </motion.div>
+
+              <motion.div
+                key={`side2-${compImages[2]}`}
+                initial={{ opacity: 0, scale: 0.8, rotate: -3 }}
+                animate={{ opacity: 1, scale: 1, rotate: -6 }}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute bottom-[-5%] left-[-8%] w-[50%] h-[55%] rounded-[2rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] z-20 group"
+              >
+                <img
+                  src={compImages[2]}
+                  alt="Jugni dish"
+                  className="w-full h-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              </motion.div>
+
+              <motion.div
+                key={`side3-${compImages[3]}`}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute bottom-[10%] right-[-12%] w-[35%] h-[40%] rounded-full overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] z-10 border-[6px] border-white/10 group"
+              >
+                <img
+                  src={compImages[3]}
+                  alt="Jugni dish"
+                  className="w-full h-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-110"
+                />
+              </motion.div>
+
+              <motion.div
+                key={`side4-${compImages[4]}`}
+                initial={{ opacity: 0, scale: 0.8, rotate: 3 }}
+                animate={{ opacity: 1, scale: 1, rotate: 4 }}
+                transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute top-[8%] left-[-10%] w-[30%] h-[35%] rounded-[1.5rem] overflow-hidden shadow-[0_20px_40px_-10px_rgba(0,0,0,0.4)] z-10 group"
+              >
+                <img
+                  src={compImages[4]}
+                  alt="Jugni dish"
+                  className="w-full h-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent" />
+              </motion.div>
+            </div>
+          </div>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="text-center mt-16 md:mt-24"
+        >
+         
+        </motion.div>
+      </div>
+
+      {/* Full Width Thumbnail Grid */}
+      <div className="hidden lg:block w-full px-12 mt-20 relative z-20">
+        <div className="grid grid-cols-6 gap-6">
+          {foodImages.map((src, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 50, rotate: i % 2 === 0 ? -2 : 2 }}
+              whileInView={{ opacity: 1, y: 0, rotate: i % 2 === 0 ? -1 : 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+              className="relative group cursor-pointer w-full"
+              style={{ perspective: 800 }}
+              onClick={() => setActiveIndex(i)}
+            >
+              <motion.div
+                animate={activeIndex === i ? { 
+                  scale: 1.05, 
+                  rotate: 0,
+                  y: -10,
+                  borderColor: "rgba(234, 179, 8, 1)",
+                  borderRadius: "9999px"
+                } : { 
+                  scale: 1, 
+                  rotate: i % 2 === 0 ? -1 : 1,
+                  y: 0,
+                  borderColor: "rgba(255, 255, 255, 0.1)",
+                  borderRadius: "24px"
+                }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  rotate: 0, 
+                  y: -8,
+                  transition: { type: "spring", damping: 25, stiffness: 200 }
+                }}
+                className="overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] border-4 transition-all duration-300 aspect-[4/5]"
+              >
+                <img
+                  src={src}
+                  alt={`Jugni dish ${i + 1}`}
+                  className="w-full h-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-110"
+                />
+                <div className={`absolute inset-0 bg-gradient-to-t from-black/40 to-transparent transition-opacity duration-300 ${activeIndex === i ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`} />
+              </motion.div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Mobile View */}
+        <div className="lg:hidden -mx-4 overflow-hidden py-6 mt-12">
+          <div className="flex overflow-x-auto gap-4 px-4 pb-4 no-scrollbar">
+            {foodImages.map((src, i) => (
+              <div 
+                key={i} 
+                className="w-[180px] flex-shrink-0"
+                onClick={() => setActiveIndex(i)}
+              >
+                <div className={`overflow-hidden shadow-2xl transition-all duration-300 ${activeIndex === i ? 'ring-4 ring-dhaba-mustard ring-offset-4 ring-offset-[#a41c1c] scale-95 rounded-full' : 'rounded-[1.5rem]'} aspect-[4/5]`}>
+                  <img src={src} alt={`Jugni dish`} className="w-full h-full object-cover" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="text-center mt-16 md:mt-24"
+        >
+          <p className="font-serif italic text-dhaba-red text-lg md:text-2xl"> 
+            Crafted with passion, served with pride.
+          </p>
+        </motion.div>
       </div>
     </section>
   );
@@ -536,7 +824,7 @@ const GroupBookings = () => {
       {/* Texture & Glow */}
       <div className="absolute inset-0 opacity-10 dhaba-pattern pointer-events-none" />
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/5 rounded-full blur-[120px] -mr-48 -mt-48 pointer-events-none" />
-      
+
       <div className="w-full px-6 md:px-24">
         <div className="flex flex-col lg:flex-row items-center justify-evenly gap-16 lg:gap-24">
           {/* Text Content */}
@@ -550,11 +838,11 @@ const GroupBookings = () => {
                 <h2 className="font-display text-5xl md:text-8xl uppercase tracking-tighter leading-none text-white pt-2">GROUP BOOKINGS</h2>
               </div>
             </div>
-            
+
             <p className="text-lg md:text-2xl text-dhaba-cream/80 mb-12 leading-relaxed font-medium">
               Whether it's a Milestone Birthday, an exclusive Kitty Party, or a Corporate stopover, we offer a sanctuary of privacy and hospitality tailored for your group.
             </p>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-8 mb-16">
               {[
                 { name: "Birthdays & Kitty Parties", icon: <Sparkles size={18} /> },
@@ -575,22 +863,22 @@ const GroupBookings = () => {
               ENQUIRE NOW <ChevronRight size={24} className="group-hover:translate-x-2 transition-transform" />
             </button>
           </div>
-          
+
           {/* Immersive Images */}
           <div className="lg:w-1/2 relative max-w-3xl">
             <div className="relative z-10 space-y-8">
               <div className="relative rounded-none overflow-hidden border-8 border-white/10 shadow-3xl transform rotate-2 hover:rotate-0 transition-all duration-700 aspect-video md:w-[700px]">
-                <img 
-                  src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1200&auto=format&fit=crop" 
-                  className="w-full h-full object-cover" 
+                <img
+                  src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1200&auto=format&fit=crop"
+                  className="w-full h-full object-cover"
                   alt="Group Event"
                   referrerPolicy="no-referrer"
                 />
               </div>
               <div className="relative rounded-none overflow-hidden border-8 border-white/10 shadow-3xl transform -rotate-1 translate-x-12 -translate-y-12 hover:rotate-0 hover:translate-x-0 hover:translate-y-0 transition-all duration-700 aspect-video md:w-[700px] hidden md:block">
-                <img 
-                  src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=1200&auto=format&fit=crop" 
-                  className="w-full h-full object-cover" 
+                <img
+                  src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=1200&auto=format&fit=crop"
+                  className="w-full h-full object-cover"
                   alt="Family Gathering"
                   referrerPolicy="no-referrer"
                 />
@@ -608,6 +896,7 @@ const GroupBookings = () => {
 interface Brand {
   name: string;
   logo: string;
+  brandLogo: string;
   subtitle: string;
 }
 
@@ -634,7 +923,7 @@ const BrandCard = ({ brand }: BrandCardProps) => {
     const height = rect.height;
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
-    
+
     // Set values relative to center of the card
     x.set(mouseX - width / 2);
     y.set(mouseY - height / 2);
@@ -658,18 +947,29 @@ const BrandCard = ({ brand }: BrandCardProps) => {
     >
       {/* Background Image */}
       <div className="absolute inset-0 overflow-hidden">
-        <motion.img 
-          src={brand.logo} 
-          alt={brand.name} 
+        <motion.img
+          src={brand.logo}
+          alt={brand.name}
           className="w-full h-full object-cover opacity-50 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700"
           referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-dhaba-dark via-dhaba-dark/40 to-transparent" />
       </div>
 
+      {brand.brandLogo && (
+        <div className="absolute top-5 left-5 z-10 rounded-2xl p-2.5 transition-all duration-300 group-hover:scale-110">
+          <img
+            src={brand.brandLogo}
+            alt={`${brand.name} logo`}
+            className="w-12 h-12 object-contain"
+            referrerPolicy="no-referrer"
+          />
+        </div>
+      )}
+
       {/* Content */}
       <div className="absolute inset-0 p-7 flex flex-col justify-end pointer-events-none text-left">
-        <motion.div 
+        <motion.div
           className="transition-transform duration-500"
         >
           {/* Fixed height container for the title ensures baseline alignment */}
@@ -678,8 +978,8 @@ const BrandCard = ({ brand }: BrandCardProps) => {
               {brand.name}
             </h4>
           </div>
-          
-          <div 
+
+          <div
             className="opacity-100 mt-2 transition-all duration-500"
           >
             <p className="font-sans text-white/70 text-xs sm:text-sm leading-tight max-w-[90%]">
@@ -698,61 +998,68 @@ const BrandCard = ({ brand }: BrandCardProps) => {
 
 const Brands = () => {
   const brands = [
-    { 
-      name: "Blue Tokai Coffee", 
-      logo: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1000&auto=format&fit=crop", 
+    {
+      name: "Blue Tokai Coffee",
+      logo: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1000&auto=format&fit=crop",
+      brandLogo: "/resturents icons/blue tokai.png",
       subtitle: "Freshly roasted specialty coffee"
     },
-    { 
-      name: "Naivedyam", 
-      logo: "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?q=80&w=1000&auto=format&fit=crop", 
+    {
+      name: "Naivedyam",
+      logo: "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?q=80&w=1000&auto=format&fit=crop",
+      brandLogo: "/resturents icons/naivedham.png",
       subtitle: "Authentic South Indian dining."
     },
-    { 
-      name: "Chaayos", 
-      logo: "https://images.unsplash.com/photo-1544787210-2211d44b5639?q=80&w=1000&auto=format&fit=crop", 
+    {
+      name: "Chaayos",
+      logo: "https://cdn.sanity.io/images/gxmub2ol/redesign-2024/569562d2fda1de68b8cf6173e2d71dd0ebb9ec54-1194x1194.png/chaayos.png?rect=136,0,923,1194&w=320&h=414&fit=min&auto=format",
+      brandLogo: "/resturents icons/chayos.png",
       subtitle: "Experiments with Chai."
     },
-    { 
-      name: "Uttham", 
-      logo: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?q=80&w=1000&auto=format&fit=crop", 
+    {
+      name: "Uttham",
+      logo: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?q=80&w=1000&auto=format&fit=crop",
+      brandLogo: "/resturents icons/uthham.png",
       subtitle: "Supreme Indian flavors and sweets."
     },
-    { 
-      name: "Three Sixty Lux", 
-      logo: "https://images.unsplash.com/photo-1547949003-9792a18a2601?q=80&w=1000&auto=format&fit=crop", 
+    {
+      name: "Three Sixty Lux",
+      logo: "https://images.unsplash.com/photo-1547949003-9792a18a2601?q=80&w=1000&auto=format&fit=crop",
+      brandLogo: "/resturents icons/3060.jpg",
       subtitle: "Luxury lounge and bar."
     },
-    { 
-      name: "Chokhi Dhani", 
-      logo: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1000&auto=format&fit=crop", 
+    {
+      name: "Chokhi Dhani",
+      logo: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1000&auto=format&fit=crop",
+      brandLogo: "/resturents icons/chokhi dhani.jpg",
       subtitle: "Rajasthani cultural dining."
     },
-    { 
-      name: "Guardian Pharmacy", 
-      logo: "https://images.unsplash.com/photo-1586015555751-63bb77f4322a?q=80&w=1000&auto=format&fit=crop", 
+    {
+      name: "Guardian Pharmacy",
+      logo: "https://images.unsplash.com/photo-1586015555751-63bb77f4322a?q=80&w=1000&auto=format&fit=crop",
+      brandLogo: "/resturents icons/LOGO-1.png",
       subtitle: "Your trusted wellness partner."
     }
   ];
 
   return (
-    <section className="py-24 md:py-32 bg-dhaba-mustard overflow-hidden">
+    <section className="py-24 md:py-32 overflow-hidden" style={{ backgroundColor: "#a41c1c" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 md:mb-24">
-          <span className="font-serif italic text-dhaba-red text-2xl">Premium Amenities</span>
-          <h2 className="font-display text-4xl md:text-7xl text-dhaba-dark mt-4 tracking-tight leading-none uppercase">WORLD-CLASS BRANDS</h2>
-          <div className="w-48 h-2 bg-dhaba-red mx-auto mt-8 rounded-full shadow-lg"></div>
+          <span className="font-serif italic text-dhaba-mustard text-2xl">Premium Amenities</span>
+          <h2 className="font-display text-4xl md:text-7xl text-white mt-4 tracking-tight leading-none uppercase">WORLD-CLASS BRANDS</h2>
+          <div className="w-48 h-2 bg-dhaba-mustard mx-auto mt-8 rounded-full shadow-lg"></div>
         </div>
-        
+
         {/* Mobile View: Dual Row Auto Marquee */}
         <div className="md:hidden -mx-4 overflow-hidden flex flex-col gap-6 py-10">
           {/* Row 1: Left to Right */}
-          <motion.div 
+          <motion.div
             animate={{ x: [-1400, 0] }}
-            transition={{ 
-              duration: 35, 
-              repeat: Infinity, 
-              ease: "linear" 
+            transition={{
+              duration: 35,
+              repeat: Infinity,
+              ease: "linear"
             }}
             className="flex gap-4 px-4"
           >
@@ -764,12 +1071,12 @@ const Brands = () => {
           </motion.div>
 
           {/* Row 2: Right to Left */}
-          <motion.div 
+          <motion.div
             animate={{ x: [0, -1400] }}
-            transition={{ 
-              duration: 40, 
-              repeat: Infinity, 
-              ease: "linear" 
+            transition={{
+              duration: 40,
+              repeat: Infinity,
+              ease: "linear"
             }}
             className="flex gap-4 px-4"
           >
@@ -792,7 +1099,7 @@ const Brands = () => {
       </div>
     </section>
   );
-};const Location = () => {
+}; const Location = () => {
   return (
     <section id="location" className="bg-dhaba-mustard pt-16 pb-0 md:py-24 text-dhaba-dark overflow-hidden border-t-4 md:border-y-4 border-dhaba-dark">
       <div className="w-full px-6 md:px-24 pb-0 md:pb-0">
@@ -807,7 +1114,7 @@ const Brands = () => {
                 <Users size={32} className="md:w-10 md:h-10 text-dhaba-red" />
               </div>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-6 md:gap-12 mb-12 md:mb-16">
               <div className="border-l-4 border-dhaba-red pl-4 md:pl-5">
                 <h4 className="font-display text-[10px] md:text-xs tracking-[0.2em] text-dhaba-red uppercase mb-2 md:mb-3 font-bold">Location</h4>
@@ -819,9 +1126,9 @@ const Brands = () => {
               </div>
             </div>
 
-            <a 
-              href="https://www.google.com/maps/place/HIGHWAY+HAVEN/@29.1562933,77.0342687,17z/data=!3m1!4b1!4m6!3m5!1s0x390dc900750c276f:0x3848e514f5da0fc4!8m2!3d29.1562933!4d77.0342687!16s%2Fg%2F11wwhd7gjp?entry=ttu&g_ep=EgoyMDI2MDQwMS4wIKXMDSoASAFQAw%3D%3D" 
-              target="_blank" 
+            <a
+              href="https://www.google.com/maps/place/HIGHWAY+HAVEN/@29.1562933,77.0342687,17z/data=!3m1!4b1!4m6!3m5!1s0x390dc900750c276f:0x3848e514f5da0fc4!8m2!3d29.1562933!4d77.0342687!16s%2Fg%2F11wwhd7gjp?entry=ttu&g_ep=EgoyMDI2MDQwMS4wIKXMDSoASAFQAw%3D%3D"
+              target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-4 md:gap-6 bg-dhaba-red text-white px-8 md:px-12 py-4 md:py-5 rounded-none font-display text-lg md:text-2xl hover:bg-dhaba-dark transition-all shadow-2xl uppercase tracking-[0.2em] group w-full md:w-fit"
             >
@@ -832,10 +1139,10 @@ const Brands = () => {
           {/* Map Container - Full width and touches footer on mobile */}
           <div className="w-screen lg:w-auto -mx-6 md:mx-0 mt-0">
             <div className="w-full h-[500px] md:w-[850px] md:h-[550px] border-t-8 border-b-0 md:border-8 border-dhaba-red/20 shadow-3xl relative">
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3484.284301299278!2d77.0342687!3d29.156293299999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390dc900750c276f%3A0x3848e514f5da0fc4!2sHIGHWAY+HAVEN!5e0!3m2!1sen!2sin!4v1775284336139!5m2!1sen!2sin" 
-                className="w-full h-full border-0 grayscale saturate-50 hover:grayscale-0 transition-all duration-500" 
-                allowFullScreen={true} 
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3484.284301299278!2d77.0342687!3d29.156293299999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390dc900750c276f%3A0x3848e514f5da0fc4!2sHIGHWAY+HAVEN!5e0!3m2!1sen!2sin!4v1775284336139!5m2!1sen!2sin"
+                className="w-full h-full border-0 grayscale saturate-50 hover:grayscale-0 transition-all duration-500"
+                allowFullScreen={true}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               ></iframe>
@@ -852,7 +1159,7 @@ const Footer = () => {
     <footer className="bg-[#BC3030] text-white py-20 relative overflow-hidden">
       {/* Decorative pulse for red background */}
       <div className="absolute top-0 left-0 w-full h-1 bg-white/10" />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid md:grid-cols-4 gap-16 mb-16">
           <div className="col-span-2">
@@ -863,14 +1170,14 @@ const Footer = () => {
               Redefining the Indian highway experience. We provide a premium sanctuary for travelers, blending traditional hospitality with modern luxury.
             </p>
             <div className="flex gap-6">
-              {[1,2,3,4].map(i => (
+              {[1, 2, 3, 4].map(i => (
                 <a key={i} href="#" className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center hover:bg-white hover:scale-110 transition-all border border-white/20">
                   <Star size={24} className="text-dhaba-mustard fill-dhaba-mustard" />
                 </a>
               ))}
             </div>
           </div>
-          
+
           <div>
             <h4 className="font-display text-2xl mb-8 text-dhaba-mustard uppercase tracking-wider">QUICK LINKS</h4>
             <ul className="space-y-5 font-sans font-bold text-white/70 text-lg">
@@ -880,7 +1187,7 @@ const Footer = () => {
               <li><a href="#location" className="hover:text-white transition-colors">Location</a></li>
             </ul>
           </div>
-          
+
           <div>
             <h4 className="font-display text-2xl mb-8 text-dhaba-mustard uppercase tracking-wider">CONNECT</h4>
             <p className="text-white/80 mb-6 text-lg font-medium">Stay updated with our latest facilities and offers.</p>
@@ -894,7 +1201,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-8 text-white/40 font-sans font-medium">
           <p>© 2026 Highway Haven. NH-1's Premium Stopover. All rights reserved.</p>
           <div className="flex gap-12">
@@ -914,13 +1221,14 @@ export default function App() {
       <main>
         <Hero />
         <Brands />
+          <JugniFoodGallery />
         <ReviewsMarquee />
         <RoadDivider />
         <Highlights />
         <RoadDivider />
-        <JugniSection />
         <LoungeSection />
         <RoadDivider />
+        <JugniSection />
         <GroupBookings />
         <RoadDivider />
         <Location />
