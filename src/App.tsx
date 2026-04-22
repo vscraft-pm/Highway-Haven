@@ -14,9 +14,11 @@ import {
   UtensilsCrossed,
   ChevronRight,
   ChevronDown,
-  Menu as MenuIcon,
   X,
-  Sparkles
+  Menu as MenuIcon,
+  Sparkles,
+  ChefHat,
+  Flame
 } from "lucide-react";
 import React, { useState } from "react";
 
@@ -24,7 +26,7 @@ import React, { useState } from "react";
 
 const RoadDivider = () => {
   return (
-    <div className="h-10 bg-dhaba-dark relative overflow-hidden flex items-center shadow-xl">
+    <div className="h-12 bg-dhaba-dark relative overflow-hidden flex items-center shadow-xl">
       {/* Edge lines */}
       <div className="absolute top-0 w-full h-[1px] bg-white/10" />
       <div className="absolute bottom-0 w-full h-[1px] bg-white/10" />
@@ -60,7 +62,7 @@ const ReviewsMarquee = () => {
     { text: "Best place for a break between Delhi and Chandigarh.", author: "Karan P." },
   ];
 
-  const ReviewItem = ({ text, author }: { text: string, author: string }) => (
+  const ReviewItem: React.FC<{ text: string; author: string }> = ({ text, author }) => (
     <div className="flex items-center gap-4 bg-white/[0.08] md:bg-white/5 md:backdrop-blur-sm px-6 py-4 rounded-3xl border border-white/10 shadow-2xl transition-all">
       <div className="flex gap-0.5 text-dhaba-mustard">
         {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
@@ -241,17 +243,43 @@ const Nav = () => {
 };
 
 const Hero = () => {
+  const slides = [
+    "/hero-bg.webp",
+    "/banner-2.jpeg",
+    "/banner-3.jpeg"
+  ];
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-      {/* Background with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src="/hero-bg.webp" 
-          alt="Premium Stopover Ambiance" 
-          className="w-full h-full object-cover"
-          referrerPolicy="no-referrer"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-dhaba-dark/90 via-dhaba-dark/60 to-dhaba-dark/20"></div>
+      {/* Background Slider with Overlay */}
+      <div className="absolute inset-0 z-0 bg-dhaba-dark">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentSlide}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="absolute inset-0"
+          >
+            <img 
+              src={slides[currentSlide]} 
+              alt={`Slide ${currentSlide + 1}`} 
+              className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
+            />
+          </motion.div>
+        </AnimatePresence>
+        <div className="absolute inset-0 bg-gradient-to-r from-dhaba-dark/95 via-dhaba-dark/70 to-dhaba-dark/30 z-1"></div>
+        <div className="absolute inset-0 bg-black/40 z-1"></div>
       </div>
 
       <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -332,14 +360,14 @@ const Highlights = () => {
   ];
 
   return (
-    <section id="highlights" className="py-24 bg-dhaba-cream relative overflow-hidden">
+    <section id="highlights" className="py-24 bg-dhaba-mustard relative overflow-hidden">
       <div className="dhaba-pattern absolute inset-0 opacity-10"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-20">
           <span className="font-serif italic text-dhaba-red text-2xl">Why Stop Here?</span>
-          <h2 className="font-display text-5xl md:text-7xl text-dhaba-dark mt-2 tracking-tight">WORLD-CLASS COMFORT</h2>
-          <div className="w-32 h-1.5 bg-dhaba-red mx-auto mt-6 rounded-full"></div>
+          <h2 className="font-display text-5xl md:text-7xl text-dhaba-dark mt-2 tracking-tight uppercase">WORLD-CLASS COMFORT</h2>
+          <div className="w-32 h-1.5 bg-dhaba-red mx-auto mt-6 rounded-full shadow-lg"></div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -347,18 +375,18 @@ const Highlights = () => {
             <motion.div 
               key={idx}
               whileHover={{ y: -10 }}
-              className="bg-white rounded-[40px] overflow-hidden border-4 border-dhaba-dark shadow-2xl group relative"
+              className="bg-white rounded-[40px] overflow-hidden border-4 border-dhaba-red shadow-2xl group relative"
             >
-              <div className="h-64 overflow-hidden relative">
+              <div className="h-48 overflow-hidden relative">
                 <img src={item.img} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" referrerPolicy="no-referrer" />
-                <div className="absolute inset-0 bg-dhaba-red/20 group-hover:bg-transparent transition-colors"></div>
+                <div className="absolute inset-0 bg-dhaba-red/10 group-hover:bg-transparent transition-colors"></div>
               </div>
-              <div className="absolute top-52 left-8 bg-dhaba-mustard p-4 rounded-2xl border-2 border-dhaba-dark shadow-lg text-dhaba-dark z-10 transition-transform group-hover:scale-110">
+              <div className="absolute top-36 left-8 bg-dhaba-red p-4 rounded-2xl border-2 border-dhaba-dark shadow-lg text-white z-10 transition-transform group-hover:scale-110">
                 {item.icon}
               </div>
-              <div className="p-10 pt-14">
-                <h3 className="font-display text-3xl mb-4 text-dhaba-red uppercase tracking-tight">{item.title}</h3>
-                <p className="text-dhaba-dark/80 text-lg font-sans leading-relaxed">{item.desc}</p>
+              <div className="p-8 pt-10">
+                <h3 className="font-display text-2xl mb-3 text-dhaba-red uppercase tracking-tight">{item.title}</h3>
+                <p className="text-dhaba-dark/80 text-sm md:text-base font-sans leading-relaxed">{item.desc}</p>
               </div>
             </motion.div>
           ))}
@@ -373,33 +401,40 @@ const LoungeSection = () => {
     { name: "Gourmet Buffet", icon: <UtensilsCrossed />, desc: "Breakfast, Lunch & Dinner" },
     { name: "Wash & Change", icon: <Bath />, desc: "Fresh up for the journey" },
     { name: "Nap Facility", icon: <Bed />, desc: "Quick rest in luxury" },
-    { name: "Business Center", icon: <Briefcase />, desc: "Work on the go" }
+    { name: "Business Center", icon: <Briefcase />, desc: "Work on the go" },
+    { name: "Private Dining", icon: <ChefHat />, desc: "Exclusive meal space" }
   ];
 
   return (
-    <section id="lounge" className="py-24 bg-dhaba-red text-white relative overflow-hidden">
+    <section id="lounge" className="py-24 bg-dhaba-mustard text-dhaba-dark relative overflow-hidden">
       <div className="absolute top-0 right-0 p-12 opacity-10">
         <Sparkles size={200} />
       </div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <h2 className="font-display text-5xl md:text-7xl mb-8 tracking-tight">THE EXCLUSIVE <span className="text-dhaba-mustard font-serif italic">LOUNGE</span></h2>
-            <p className="text-dhaba-cream/80 text-xl mb-12 leading-relaxed font-light max-w-lg">
+        <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-12 lg:gap-20 items-center">
+          <div className="text-center lg:text-left">
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl mb-8 tracking-tight leading-[1.1] text-dhaba-dark">
+              <span className="block lg:whitespace-nowrap uppercase">FIRST HIGHWAY PITSTOP</span>
+              <span className="block lg:whitespace-nowrap uppercase">TO OFFER A <span className="text-dhaba-red font-serif italic lowercase">lounge</span></span>
+            </h2>
+            <p className="text-dhaba-dark/70 text-lg md:text-xl mb-12 leading-relaxed font-medium max-w-lg mx-auto lg:mx-0">
               Experience our premium sanctuary designed for the discerning traveler. A place to rest, work, and dine in absolute luxury.
             </p>
             
-            <div className="relative mt-16 max-w-lg">
-              <div className="grid grid-cols-2 gap-y-12 gap-x-0 items-start">
+            <div className="mt-12 max-w-3xl mx-auto lg:mx-0">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
                 {facilities.map((f, idx) => (
-                  <div key={idx} className={`flex flex-col items-start text-left group w-full ${idx % 2 === 1 ? 'pl-6' : 'pr-4'}`}>
-                    <div className="text-white group-hover:scale-110 transition-transform duration-500 drop-shadow-2xl mb-3">
-                      {React.cloneElement(f.icon as React.ReactElement, { size: 28, strokeWidth: 1.2 })}
+                  <div 
+                    key={idx} 
+                    className="p-6 rounded-[32px] bg-white/40 border border-dhaba-dark/5 flex flex-col items-start text-left group transition-all hover:bg-white shadow-xl hover:-translate-y-1"
+                  >
+                    <div className="text-dhaba-red mb-4">
+                      {React.cloneElement(f.icon as React.ReactElement, { size: 28, strokeWidth: 2 })}
                     </div>
-                    <div className="space-y-1">
-                      <h4 className="font-display text-sm md:text-base text-dhaba-mustard leading-tight uppercase tracking-widest whitespace-nowrap">{f.name}</h4>
-                      <p className="text-dhaba-cream/40 text-[9px] md:text-[10px] leading-none whitespace-nowrap">{f.desc}</p>
+                    <div>
+                      <h4 className="font-display text-xs font-bold uppercase tracking-widest text-dhaba-dark mb-1">{f.name}</h4>
+                      <p className="text-dhaba-dark/40 text-[9px] uppercase tracking-wider font-bold">{f.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -408,8 +443,8 @@ const LoungeSection = () => {
           </div>
           
           <div className="relative">
-            <div className="relative p-1 bg-[repeating-linear-gradient(45deg,#B91C1C,#B91C1C_10px,#EAB308_10px,#EAB308_20px)] rounded-[44px] shadow-2xl overflow-hidden">
-              <div className="rounded-[40px] overflow-hidden relative h-[600px]">
+            <div className="relative p-1 bg-[repeating-linear-gradient(45deg,#BC3030,#BC3030_10px,#white_10px,#white_20px)] rounded-[44px] shadow-2xl overflow-hidden">
+              <div className="rounded-[40px] overflow-hidden relative h-[600px] border-4 border-dhaba-red">
                 <img 
                   src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop" 
                   alt="Luxury Lounge Preview" 
@@ -418,7 +453,7 @@ const LoungeSection = () => {
                 />
                 <div className="absolute inset-0 bg-dhaba-dark/40 flex items-center justify-center">
                   <div className="text-center px-6">
-                    <p className="font-display text-4xl text-dhaba-mustard mb-2 tracking-widest">NOW OPEN</p>
+                    <p className="font-display text-4xl text-dhaba-mustard mb-2 tracking-widest uppercase">NOW OPEN</p>
                     <p className="font-serif italic text-xl md:text-2xl text-white">Experience Highway Luxury</p>
                   </div>
                 </div>
@@ -431,48 +466,138 @@ const LoungeSection = () => {
   );
 };
 
+const JugniSection = () => {
+  return (
+    <section id="jugni" className="py-24 bg-gradient-to-br from-[#B91C1C] via-dhaba-red to-[#991B1B] text-white relative overflow-hidden">
+      {/* Texture & Glow */}
+      <div className="absolute inset-0 opacity-10 dhaba-pattern pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/5 rounded-full blur-[120px] -mr-48 -mt-48 pointer-events-none" />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+          <div className="lg:w-1/2 order-2 lg:order-1 hidden lg:block">
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-dhaba-mustard/10 rounded-[48px] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative rounded-[40px] overflow-hidden border-8 border-white/10 shadow-2xl aspect-square">
+                <img 
+                   src="https://images.unsplash.com/photo-1626777552726-4a6b54c97eb4?q=80&w=1200&auto=format&fit=crop" 
+                   alt="Jugni Specialty Non-Veg" 
+                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                   referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-dhaba-dark/60 via-transparent to-transparent" />
+                <div className="absolute bottom-10 left-10 hidden md:block">
+                  <p className="font-serif italic text-white text-2xl drop-shadow-lg">Traditional Recipes,</p>
+                  <p className="font-display text-4xl text-dhaba-mustard tracking-widest uppercase drop-shadow-2xl">Modern Flavor</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:w-1/2 order-1 lg:order-2 text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 bg-dhaba-mustard text-dhaba-dark px-5 py-2 rounded-full font-display text-xs mb-8 border border-dhaba-dark/20 shadow-xl uppercase tracking-[0.2em]">
+              <Flame size={14} className="fill-dhaba-dark" /> Legend of NH-1
+            </div>
+            <h2 className="font-display text-7xl md:text-9xl mb-8 tracking-tighter leading-none text-white drop-shadow-sm">JUGNI</h2>
+            <p className="text-dhaba-cream/80 text-lg md:text-xl mb-12 leading-relaxed font-medium max-w-lg mx-auto lg:mx-0">
+              Discover the soul of North Indian meat artistry. Jugni is our dedicated sanctuary for non-veg aficionados, serving legendary slow-cooked curries and sizzling charcoal grills.
+            </p>
+            
+            <div className="grid grid-cols-2 gap-6 max-w-lg mx-auto lg:mx-0">
+              <div className="p-7 rounded-[32px] bg-white/5 border border-white/10 flex flex-col items-center lg:items-start text-center lg:text-left shadow-sm">
+                <div className="p-4 bg-dhaba-mustard text-dhaba-dark rounded-2xl shadow-lg mb-5">
+                  <UtensilsCrossed size={24} />
+                </div>
+                <div>
+                  <h4 className="font-display text-sm font-bold uppercase tracking-widest text-white mb-1">Hand-Pounded</h4>
+                  <p className="text-dhaba-mustard/60 text-[10px] uppercase font-bold tracking-wider">Spices and Masalas</p>
+                </div>
+              </div>
+              <div className="p-7 rounded-[32px] bg-white/5 border border-white/10 flex flex-col items-center lg:items-start text-center lg:text-left shadow-sm">
+                <div className="p-4 bg-white/10 text-dhaba-mustard rounded-2xl shadow-lg mb-5">
+                  <Star size={24} fill="currentColor" />
+                </div>
+                <div>
+                  <h4 className="font-display text-sm font-bold uppercase tracking-widest text-white mb-1">Premium Cuts</h4>
+                  <p className="text-dhaba-mustard/60 text-[10px] uppercase font-bold tracking-wider">Farm to Highway</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const GroupBookings = () => {
   return (
-    <section id="groups" className="py-24 bg-dhaba-mustard">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-dhaba-red text-white rounded-[50px] p-12 md:p-20 border-4 border-dhaba-dark shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32"></div>
-          
-          <div className="relative z-10 flex flex-col lg:flex-row items-center gap-16">
-            <div className="lg:w-1/2">
-              <div className="flex items-center gap-4 mb-6">
-                <Users size={48} className="text-dhaba-mustard" />
-                <h2 className="font-display text-4xl md:text-6xl uppercase tracking-tighter">GROUP BOOKINGS</h2>
+    <section id="groups" className="py-24 md:py-32 bg-dhaba-red text-white relative overflow-hidden border-y-4 border-dhaba-dark">
+      {/* Texture & Glow */}
+      <div className="absolute inset-0 opacity-10 dhaba-pattern pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/5 rounded-full blur-[120px] -mr-48 -mt-48 pointer-events-none" />
+      
+      <div className="w-full px-6 md:px-24">
+        <div className="flex flex-col lg:flex-row items-center justify-evenly gap-16 lg:gap-24">
+          {/* Text Content */}
+          <div className="lg:w-1/2 max-w-2xl">
+            <div className="flex items-center gap-6 mb-10">
+              <div className="bg-dhaba-mustard p-4 rounded-3xl border-2 border-dhaba-dark shadow-lg">
+                <Users size={40} className="text-dhaba-dark" />
               </div>
-              <p className="text-xl text-dhaba-cream/80 mb-10 leading-relaxed font-sans">
-                Traveling with a large group? Whether it's a family reunion, corporate outing, or a tourist bus, we have dedicated spaces and customized packages to make your stop seamless and enjoyable.
-              </p>
-              <ul className="space-y-4 mb-10">
-                {["Dedicated Seating Areas", "Customized Group Menus", "Priority Service", "Special Bus Parking"].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 font-display text-lg text-dhaba-mustard">
-                    <div className="w-2 h-2 bg-dhaba-mustard rounded-full"></div> {item}
-                  </li>
-                ))}
-              </ul>
-              <button className="bg-white text-dhaba-red px-10 py-4 rounded-xl font-display text-xl hover:bg-dhaba-mustard hover:text-dhaba-dark transition-all border-2 border-dhaba-dark shadow-xl">
-                ENQUIRE NOW
-              </button>
+              <div>
+                <span className="font-serif italic text-dhaba-mustard text-xl md:text-2xl block mb-1 underline decoration-dhaba-mustard decoration-2 underline-offset-8">Unforgettable Celebrations</span>
+                <h2 className="font-display text-5xl md:text-8xl uppercase tracking-tighter leading-none text-white pt-2">GROUP BOOKINGS</h2>
+              </div>
             </div>
             
-            <div className="lg:w-1/2 grid grid-cols-2 gap-4">
-              <img 
-                src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=500&auto=format&fit=crop" 
-                className="rounded-3xl border-2 border-white shadow-lg h-48 w-full object-cover" 
-                alt="Group Event"
-                referrerPolicy="no-referrer"
-              />
-              <img 
-                src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=500&auto=format&fit=crop" 
-                className="rounded-3xl border-2 border-white shadow-lg h-48 w-full object-cover mt-8" 
-                alt="Family Gathering"
-                referrerPolicy="no-referrer"
-              />
+            <p className="text-lg md:text-2xl text-dhaba-cream/80 mb-12 leading-relaxed font-medium">
+              Whether it's a Milestone Birthday, an exclusive Kitty Party, or a Corporate stopover, we offer a sanctuary of privacy and hospitality tailored for your group.
+            </p>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-8 mb-16">
+              {[
+                { name: "Birthdays & Kitty Parties", icon: <Sparkles size={18} /> },
+                { name: "Dedicated Seating Areas", icon: <MapPin size={18} /> },
+                { name: "Customized Group Menus", icon: <UtensilsCrossed size={18} /> },
+                { name: "Priority Service", icon: <Zap size={18} /> }
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-4 group">
+                  <div className="w-12 h-12 rounded-xl bg-dhaba-mustard/10 flex items-center justify-center text-dhaba-mustard group-hover:bg-dhaba-mustard group-hover:text-dhaba-dark transition-all border border-dhaba-mustard/20">
+                    {item.icon}
+                  </div>
+                  <span className="font-display text-base md:text-xl uppercase tracking-wider text-white font-bold">{item.name}</span>
+                </div>
+              ))}
             </div>
+
+            <button className="w-full md:w-fit bg-white text-dhaba-red px-12 py-5 rounded-none font-display text-xl md:text-2xl hover:bg-dhaba-mustard hover:text-dhaba-dark transition-all shadow-2xl flex items-center justify-center gap-6 uppercase tracking-[0.2em] group border-2 border-transparent">
+              ENQUIRE NOW <ChevronRight size={24} className="group-hover:translate-x-2 transition-transform" />
+            </button>
+          </div>
+          
+          {/* Immersive Images */}
+          <div className="lg:w-1/2 relative max-w-3xl">
+            <div className="relative z-10 space-y-8">
+              <div className="relative rounded-none overflow-hidden border-8 border-white/10 shadow-3xl transform rotate-2 hover:rotate-0 transition-all duration-700 aspect-video md:w-[700px]">
+                <img 
+                  src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1200&auto=format&fit=crop" 
+                  className="w-full h-full object-cover" 
+                  alt="Group Event"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <div className="relative rounded-none overflow-hidden border-8 border-white/10 shadow-3xl transform -rotate-1 translate-x-12 -translate-y-12 hover:rotate-0 hover:translate-x-0 hover:translate-y-0 transition-all duration-700 aspect-video md:w-[700px] hidden md:block">
+                <img 
+                  src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=1200&auto=format&fit=crop" 
+                  className="w-full h-full object-cover" 
+                  alt="Family Gathering"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            </div>
+            {/* Decorative background circle */}
+            <div className="absolute -inset-20 bg-dhaba-mustard/5 rounded-full blur-[150px] -z-10 animate-pulse"></div>
           </div>
         </div>
       </div>
@@ -529,7 +654,7 @@ const BrandCard = ({ brand }: BrandCardProps) => {
         rotateX: springRotateX,
         rotateY: springRotateY,
       }}
-      className="relative w-full aspect-[4/5] bg-dhaba-dark rounded-[30px] overflow-hidden group cursor-pointer border-4 border-dhaba-mustard/20 hover:border-dhaba-mustard/60 transition-colors shadow-2xl flex-shrink-0"
+      className="relative w-full aspect-[4/5] bg-dhaba-dark rounded-[30px] overflow-hidden group cursor-pointer border-4 border-dhaba-red transition-all duration-300 shadow-2xl flex-shrink-0"
     >
       {/* Background Image */}
       <div className="absolute inset-0 overflow-hidden">
@@ -570,97 +695,12 @@ const BrandCard = ({ brand }: BrandCardProps) => {
   );
 };
 
-const BrandStack = ({ brands }: { brands: Brand[] }) => {
-  const [index, setIndex] = useState(0);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const stackRef = React.useRef<HTMLDivElement>(null);
-
-  const handleSwipe = () => {
-    setIndex((prev) => (prev + 1) % brands.length);
-  };
-
-  React.useEffect(() => {
-    const el = stackRef.current;
-    if (!el) return;
-
-    const handleManualWheel = (e: WheelEvent) => {
-      // When hovering over the stack, we capture the scroll
-      if (Math.abs(e.deltaY) > 5) {
-        e.preventDefault();
-        
-        if (!isScrolling && e.deltaY > 20) {
-          setIsScrolling(true);
-          handleSwipe();
-          setTimeout(() => setIsScrolling(false), 800);
-        }
-      }
-    };
-
-    el.addEventListener('wheel', handleManualWheel, { passive: false });
-    return () => el.removeEventListener('wheel', handleManualWheel);
-  }, [isScrolling]);
-
-  return (
-    <div 
-      ref={stackRef}
-      className="relative h-[520px] w-full max-w-[340px] mx-auto mt-6"
-    >
-      <AnimatePresence initial={false}>
-        {[2, 1, 0].map((offset) => {
-          const brandIndex = (index + offset) % brands.length;
-          const brand = brands[brandIndex];
-          const isFront = offset === 0;
-
-          return (
-            <motion.div
-              key={brand.name}
-              style={{
-                zIndex: 10 - offset,
-                cursor: isFront ? "grab" : "default"
-              }}
-              drag={isFront ? "y" : false}
-              dragConstraints={{ top: 0, bottom: 0 }}
-              onDragDirectionLock
-              onDragEnd={(_, info) => {
-                if (info.offset.y < -80 || info.velocity.y < -400) {
-                  handleSwipe();
-                }
-              }}
-              initial={{ 
-                scale: 0.9, 
-                y: 20, 
-                opacity: 0 
-              }}
-              animate={{ 
-                scale: 1 - offset * 0.05, 
-                y: offset * 25, 
-                x: offset * 8,
-                rotate: offset * -2,
-                opacity: 1 - offset * 0.15,
-                filter: isFront ? "blur(0px)" : "blur(0.5px)"
-              }}
-              exit={{ 
-                y: -600, 
-                opacity: 0, 
-                scale: 0.95
-              }}
-              transition={{ type: "spring", stiffness: 300, damping: 28 }}
-              className="absolute inset-0"
-            >
-              <BrandCard brand={brand} />
-            </motion.div>
-          );
-        })}
-      </AnimatePresence>
-    </div>
-  );
-};
 
 const Brands = () => {
   const brands = [
     { 
       name: "Blue Tokai Coffee", 
-      logo: "https://images.unsplash.com/photo-1541167760496-162955ed8a9f?q=80&w=1000&auto=format&fit=crop", 
+      logo: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1000&auto=format&fit=crop", 
       subtitle: "Freshly roasted specialty coffee"
     },
     { 
@@ -670,7 +710,7 @@ const Brands = () => {
     },
     { 
       name: "Chaayos", 
-      logo: "https://images.unsplash.com/photo-1576091160550-2173bdd99611?q=80&w=1000&auto=format&fit=crop", 
+      logo: "https://images.unsplash.com/photo-1544787210-2211d44b5639?q=80&w=1000&auto=format&fit=crop", 
       subtitle: "Experiments with Chai."
     },
     { 
@@ -690,99 +730,116 @@ const Brands = () => {
     },
     { 
       name: "Guardian Pharmacy", 
-      logo: "https://images.unsplash.com/photo-1587854692152-cbe660dbbb88?q=80&w=1000&auto=format&fit=crop", 
+      logo: "https://images.unsplash.com/photo-1586015555751-63bb77f4322a?q=80&w=1000&auto=format&fit=crop", 
       subtitle: "Your trusted wellness partner."
     }
   ];
 
   return (
-    <section className="py-24 md:py-32 bg-dhaba-cream overflow-hidden">
+    <section className="py-24 md:py-32 bg-dhaba-mustard overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 md:mb-24">
           <span className="font-serif italic text-dhaba-red text-2xl">Premium Amenities</span>
-          <h2 className="font-display text-4xl md:text-7xl text-dhaba-dark mt-4 tracking-tight leading-none">WORLD-CLASS BRANDS</h2>
-          <div className="w-48 h-2 bg-dhaba-mustard mx-auto mt-8 rounded-full shadow-lg"></div>
+          <h2 className="font-display text-4xl md:text-7xl text-dhaba-dark mt-4 tracking-tight leading-none uppercase">WORLD-CLASS BRANDS</h2>
+          <div className="w-48 h-2 bg-dhaba-red mx-auto mt-8 rounded-full shadow-lg"></div>
         </div>
         
-        {/* Mobile View: Swipable Stack */}
-        <div className="md:hidden flex flex-col items-center">
-          <BrandStack brands={brands} />
-          <div className="mt-12 flex items-center gap-3 text-dhaba-dark/30 font-display text-[10px] uppercase tracking-[0.3em]">
-            <div className="w-8 h-[1px] bg-current"></div>
-            <span>Swipe up for next</span>
-            <div className="w-8 h-[1px] bg-current"></div>
-          </div>
+        {/* Mobile View: Dual Row Auto Marquee */}
+        <div className="md:hidden -mx-4 overflow-hidden flex flex-col gap-6 py-10">
+          {/* Row 1: Left to Right */}
+          <motion.div 
+            animate={{ x: [-1400, 0] }}
+            transition={{ 
+              duration: 35, 
+              repeat: Infinity, 
+              ease: "linear" 
+            }}
+            className="flex gap-4 px-4"
+          >
+            {[...brands, ...brands].map((brand, i) => (
+              <div key={`row1-${brand.name}-${i}`} className="w-[200px] flex-shrink-0">
+                <BrandCard brand={brand} />
+              </div>
+            ))}
+          </motion.div>
+
+          {/* Row 2: Right to Left */}
+          <motion.div 
+            animate={{ x: [0, -1400] }}
+            transition={{ 
+              duration: 40, 
+              repeat: Infinity, 
+              ease: "linear" 
+            }}
+            className="flex gap-4 px-4"
+          >
+            {[...brands.reverse(), ...brands].map((brand, i) => (
+              <div key={`row2-${brand.name}-${i}`} className="w-[200px] flex-shrink-0">
+                <BrandCard brand={brand} />
+              </div>
+            ))}
+          </motion.div>
         </div>
 
-        {/* Desktop View: Grid */}
-        <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        {/* Desktop View: Flexbox (Centered) */}
+        <div className="hidden md:flex flex-wrap justify-center gap-6 lg:gap-8">
           {brands.map((brand, i) => (
-            <BrandCard key={brand.name} brand={brand} />
+            <div key={brand.name} className="w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.5rem)] max-w-[320px]">
+              <BrandCard brand={brand} />
+            </div>
           ))}
         </div>
       </div>
     </section>
   );
-};
-
-const Location = () => {
+};const Location = () => {
   return (
-    <section id="location" className="py-24 bg-dhaba-cream">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white border-4 border-dhaba-dark rounded-[50px] overflow-hidden shadow-2xl flex flex-col lg:flex-row">
-          <div className="lg:w-1/2 p-12 md:p-20">
-            <h2 className="font-display text-4xl md:text-6xl mb-12 text-dhaba-red">VISIT HIGHWAY HAVEN</h2>
-            <div className="space-y-10">
-              <div className="flex gap-6">
-                <div className="bg-dhaba-red text-white p-4 rounded-2xl h-fit border-2 border-dhaba-dark shadow-lg">
-                  <MapPin size={32} />
-                </div>
-                <div>
-                  <p className="font-display text-xl mb-1">OUR LOCATION</p>
-                  <p className="text-dhaba-dark/70 text-lg leading-relaxed">NH-1, 64th Milestone, Ganaur, Sonipat, Haryana 131101</p>
-                </div>
-              </div>
-              <div className="flex gap-6">
-                <div className="bg-dhaba-mustard text-dhaba-dark p-4 rounded-2xl h-fit border-2 border-dhaba-dark shadow-lg">
-                  <Clock size={32} />
-                </div>
-                <div>
-                  <p className="font-display text-xl mb-1">OPENING HOURS</p>
-                  <p className="text-dhaba-dark/70 text-lg">Open 24 Hours, 7 Days a Week</p>
-                </div>
-              </div>
-              <div className="flex gap-6">
-                <div className="bg-dhaba-teal text-white p-4 rounded-2xl h-fit border-2 border-dhaba-dark shadow-lg">
-                  <Phone size={32} />
-                </div>
-                <div>
-                  <p className="font-display text-xl mb-1">CONTACT US</p>
-                  <p className="text-dhaba-dark/70 text-lg">+91 98765 43210 | info@highwayhaven.co.in</p>
-                </div>
+    <section id="location" className="bg-dhaba-mustard pt-16 pb-0 md:py-24 text-dhaba-dark overflow-hidden border-t-4 md:border-y-4 border-dhaba-dark">
+      <div className="w-full px-6 md:px-24 pb-0 md:pb-0">
+        <div className="flex flex-col lg:flex-row items-center justify-evenly gap-12 md:gap-16">
+          {/* Text Content */}
+          <div className="w-full lg:w-1/2 max-w-2xl mb-12 lg:mb-0">
+            <div className="flex items-center gap-4 md:gap-6 mb-10 md:mb-12">
+              <h2 className="font-display text-4xl md:text-8xl tracking-tight uppercase leading-none text-dhaba-dark">
+                GET IN <span className="text-dhaba-red">TOUCH</span>
+              </h2>
+              <div className="bg-white/40 p-3 md:p-4 border-2 border-dhaba-red">
+                <Users size={32} className="md:w-10 md:h-10 text-dhaba-red" />
               </div>
             </div>
             
-            <div className="mt-16">
-              <a 
-                href="https://www.google.com/maps/place/HIGHWAY+HAVEN/@29.1562933,77.0342687,17z/data=!3m1!4b1!4m6!3m5!1s0x390dc900750c276f:0x3848e514f5da0fc4!8m2!3d29.1562933!4d77.0342687!16s%2Fg%2F11wwhd7gjp?entry=ttu&g_ep=EgoyMDI2MDQwMS4wIKXMDSoASAFQAw%3D%3D" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-full bg-dhaba-mustard text-dhaba-dark py-5 rounded-2xl font-display text-xl border-2 border-dhaba-dark hover:bg-dhaba-red hover:text-white transition-all shadow-xl flex items-center justify-center"
-              >
-                GET DIRECTIONS
-              </a>
+            <div className="grid grid-cols-2 gap-6 md:gap-12 mb-12 md:mb-16">
+              <div className="border-l-4 border-dhaba-red pl-4 md:pl-5">
+                <h4 className="font-display text-[10px] md:text-xs tracking-[0.2em] text-dhaba-red uppercase mb-2 md:mb-3 font-bold">Location</h4>
+                <p className="text-sm md:text-2xl font-bold leading-tight text-dhaba-dark">64th Milestone, Ganaur,<br /> Sonipat, Haryana</p>
+              </div>
+              <div className="border-l-4 border-dhaba-red pl-4 md:pl-5">
+                <h4 className="font-display text-[10px] md:text-xs tracking-[0.2em] text-dhaba-red uppercase mb-2 md:mb-3 font-bold">Connect</h4>
+                <p className="text-sm md:text-2xl font-bold leading-tight text-dhaba-dark">+91 98765 43210<br />info@highwayhaven.in</p>
+              </div>
             </div>
+
+            <a 
+              href="https://www.google.com/maps/place/HIGHWAY+HAVEN/@29.1562933,77.0342687,17z/data=!3m1!4b1!4m6!3m5!1s0x390dc900750c276f:0x3848e514f5da0fc4!8m2!3d29.1562933!4d77.0342687!16s%2Fg%2F11wwhd7gjp?entry=ttu&g_ep=EgoyMDI2MDQwMS4wIKXMDSoASAFQAw%3D%3D" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-4 md:gap-6 bg-dhaba-red text-white px-8 md:px-12 py-4 md:py-5 rounded-none font-display text-lg md:text-2xl hover:bg-dhaba-dark transition-all shadow-2xl uppercase tracking-[0.2em] group w-full md:w-fit"
+            >
+              NAVIGATE <ChevronRight size={20} className="md:w-6 md:h-6 group-hover:translate-x-2 transition-transform" />
+            </a>
           </div>
-          
-          <div className="lg:w-1/2 h-[500px] lg:h-auto bg-gray-200 relative">
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3484.284301299278!2d77.0342687!3d29.156293299999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390dc900750c276f%3A0x3848e514f5da0fc4!2sHIGHWAY%20HAVEN!5e0!3m2!1sen!2sin!4v1775284336139!5m2!1sen!2sin" 
-              className="w-full h-full border-0 grayscale" 
-              allowFullScreen={true} 
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-            <div className="absolute inset-0 pointer-events-none border-l-4 border-dhaba-dark"></div>
+
+          {/* Map Container - Full width and touches footer on mobile */}
+          <div className="w-screen lg:w-auto -mx-6 md:mx-0 mt-0">
+            <div className="w-full h-[500px] md:w-[850px] md:h-[550px] border-t-8 border-b-0 md:border-8 border-dhaba-red/20 shadow-3xl relative">
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3484.284301299278!2d77.0342687!3d29.156293299999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390dc900750c276f%3A0x3848e514f5da0fc4!2sHIGHWAY+HAVEN!5e0!3m2!1sen!2sin!4v1775284336139!5m2!1sen!2sin" 
+                className="w-full h-full border-0 grayscale saturate-50 hover:grayscale-0 transition-all duration-500" 
+                allowFullScreen={true} 
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
           </div>
         </div>
       </div>
@@ -792,20 +849,23 @@ const Location = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-dhaba-dark text-white py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="bg-[#BC3030] text-white py-20 relative overflow-hidden">
+      {/* Decorative pulse for red background */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-white/10" />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid md:grid-cols-4 gap-16 mb-16">
           <div className="col-span-2">
             <div className="flex items-center mb-8">
-              <img src="/hh-logo.png" alt="Highway Haven Logo" className="h-16 w-auto object-contain" />
+              <img src="/hh-logo.png" alt="Highway Haven Logo" className="h-20 w-auto object-contain" />
             </div>
-            <p className="text-dhaba-cream/60 max-w-md text-lg leading-relaxed mb-10">
+            <p className="text-white/80 max-w-md text-lg leading-relaxed mb-10 font-medium">
               Redefining the Indian highway experience. We provide a premium sanctuary for travelers, blending traditional hospitality with modern luxury.
             </p>
             <div className="flex gap-6">
               {[1,2,3,4].map(i => (
-                <a key={i} href="#" className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-dhaba-red hover:scale-110 transition-all border border-white/10">
-                  <Star size={24} className="text-dhaba-mustard" />
+                <a key={i} href="#" className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center hover:bg-white hover:scale-110 transition-all border border-white/20">
+                  <Star size={24} className="text-dhaba-mustard fill-dhaba-mustard" />
                 </a>
               ))}
             </div>
@@ -813,29 +873,29 @@ const Footer = () => {
           
           <div>
             <h4 className="font-display text-2xl mb-8 text-dhaba-mustard uppercase tracking-wider">QUICK LINKS</h4>
-            <ul className="space-y-5 font-sans font-bold text-dhaba-cream/70 text-lg">
-              <li><a href="#highlights" className="hover:text-dhaba-red transition-colors">Highlights</a></li>
-              <li><a href="#lounge" className="hover:text-dhaba-red transition-colors">Lounge</a></li>
-              <li><a href="#groups" className="hover:text-dhaba-red transition-colors">Group Bookings</a></li>
-              <li><a href="#location" className="hover:text-dhaba-red transition-colors">Location</a></li>
+            <ul className="space-y-5 font-sans font-bold text-white/70 text-lg">
+              <li><a href="#highlights" className="hover:text-white transition-colors">Highlights</a></li>
+              <li><a href="#lounge" className="hover:text-white transition-colors">Lounge</a></li>
+              <li><a href="#groups" className="hover:text-white transition-colors">Group Bookings</a></li>
+              <li><a href="#location" className="hover:text-white transition-colors">Location</a></li>
             </ul>
           </div>
           
           <div>
             <h4 className="font-display text-2xl mb-8 text-dhaba-mustard uppercase tracking-wider">CONNECT</h4>
-            <p className="text-dhaba-cream/60 mb-6 text-lg">Stay updated with our latest facilities and offers.</p>
+            <p className="text-white/80 mb-6 text-lg font-medium">Stay updated with our latest facilities and offers.</p>
             <div className="flex flex-col gap-4">
-              <a href="tel:+919876543210" className="flex items-center gap-3 text-xl hover:text-dhaba-red transition-colors">
+              <a href="tel:+919876543210" className="flex items-center gap-3 text-xl hover:text-dhaba-mustard transition-colors font-bold">
                 <Phone size={20} /> +91 98765 43210
               </a>
-              <a href="mailto:info@highwayhaven.co.in" className="flex items-center gap-3 text-xl hover:text-dhaba-red transition-colors">
+              <a href="mailto:info@highwayhaven.co.in" className="flex items-center gap-3 text-xl hover:text-dhaba-mustard transition-colors font-bold">
                 <Briefcase size={20} /> info@highwayhaven.co.in
               </a>
             </div>
           </div>
         </div>
         
-        <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-8 text-dhaba-cream/40 font-sans font-medium">
+        <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-8 text-white/40 font-sans font-medium">
           <p>© 2026 Highway Haven. NH-1's Premium Stopover. All rights reserved.</p>
           <div className="flex gap-12">
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
@@ -858,6 +918,7 @@ export default function App() {
         <RoadDivider />
         <Highlights />
         <RoadDivider />
+        <JugniSection />
         <LoungeSection />
         <RoadDivider />
         <GroupBookings />
