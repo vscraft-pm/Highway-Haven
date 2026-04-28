@@ -21,7 +21,9 @@ import {
   Flame,
   FlameKindling,
   Drumstick,
-  Soup
+  Soup,
+  Truck,
+  Car
 } from "lucide-react";
 import React, { useState } from "react";
 
@@ -43,6 +45,31 @@ const RoadDivider = () => {
           />
         ))}
       </div>
+
+      {/* Moving Vehicles */}
+      <motion.div
+        animate={{ x: ["-100%", "100vw"] }}
+        transition={{ duration: 18, repeat: Infinity, ease: "linear", delay: 0 }}
+        className="absolute z-10 text-dhaba-mustard/30"
+      >
+        <Truck size={24} fill="currentColor" />
+      </motion.div>
+
+      <motion.div
+        animate={{ x: ["-100%", "100vw"] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "linear", delay: 5 }}
+        className="absolute z-10 text-white/20"
+      >
+        <Car size={20} fill="currentColor" />
+      </motion.div>
+
+      <motion.div
+        animate={{ x: ["-100%", "100vw"] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "linear", delay: 10 }}
+        className="absolute z-10 text-dhaba-mustard/20"
+      >
+        <Car size={20} fill="currentColor" />
+      </motion.div>
 
       {/* Road grain effect */}
       <div className="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(circle,white_1px,transparent_1px)] bg-[length:4px_4px]" />
@@ -78,7 +105,18 @@ const ReviewsMarquee = () => {
   );
 
   return (
-    <div className="bg-dhaba-red py-24 overflow-hidden relative border-y-4 border-dhaba-red shadow-[inset_0_0_100px_rgba(0,0,0,0.5)]">
+    <section className="relative py-24 md:py-32 overflow-visible">
+      {/* Tilted Top Background Layer */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{ 
+          backgroundColor: "#a41c1c",
+          clipPath: "polygon(0 4rem, 100% 0, 100% 100%, 0 100%)",
+          marginTop: "-4rem"
+        }}
+      />
+      
+      <div className="relative z-10 pt-4 md:pt-8">
       {/* Section Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 mb-20 text-center">
         <span className="font-serif italic text-dhaba-mustard text-2xl mb-4 block">Experiences That Speak for Themselves</span>
@@ -122,7 +160,8 @@ const ReviewsMarquee = () => {
       {/* Side gradients to fade out reviews */}
       <div className="absolute inset-y-0 left-0 w-20 md:w-48 bg-gradient-to-r from-dhaba-red via-dhaba-red/80 to-transparent z-10" />
       <div className="absolute inset-y-0 right-0 w-20 md:w-48 bg-gradient-to-l from-dhaba-red via-dhaba-red/80 to-transparent z-10" />
-    </div>
+      </div>
+    </section>
   );
 };
 
@@ -500,21 +539,13 @@ const LoungeSection = () => {
           </div>
 
           <div className="relative">
-            <div className="relative p-1 bg-[repeating-linear-gradient(45deg,#EAB308,#EAB308_10px,#fff_10px,#fff_20px)] rounded-[44px] shadow-2xl overflow-hidden">
-              <div className="rounded-[40px] overflow-hidden relative h-[600px] border-4 border-dhaba-mustard">
-                <img
-                  src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop"
-                  alt="Luxury Lounge Preview"
-                  className="w-full h-full object-cover opacity-80"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-dhaba-dark/40 flex items-center justify-center">
-                  <div className="text-center px-6">
-                    <p className="font-display text-4xl text-dhaba-mustard mb-2 tracking-widest uppercase">NOW OPEN</p>
-                    <p className="font-serif italic text-xl md:text-2xl text-white">Experience Highway Luxury</p>
-                  </div>
-                </div>
-              </div>
+            <div className="rounded-[40px] overflow-hidden relative h-[600px] shadow-2xl border-2 border-white/10">
+              <img
+                src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop"
+                alt="Luxury Lounge Preview"
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+              />
             </div>
           </div>
         </div>
@@ -569,7 +600,7 @@ const JugniSection = () => {
                 </div>
               </div>
               <div className="p-7 rounded-[32px] bg-white/40 border border-dhaba-dark/5 flex flex-col items-center lg:items-start text-center lg:text-left shadow-sm hover:bg-white transition-all">
-                <div className="p-4 bg-dhaba-dark/10 text-dhaba-red rounded-2xl shadow-lg mb-5">
+                <div className="p-4 bg-dhaba-red text-white rounded-2xl shadow-lg mb-5">
                   <Star size={24} fill="currentColor" />
                 </div>
                 <div>
@@ -587,7 +618,7 @@ const JugniSection = () => {
 };
 
 const JugniFoodGallery = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [imgIndex, setImgIndex] = useState(0);
 
   const foodImages = [
     "/foods/GALLERY2.jpg",
@@ -595,226 +626,94 @@ const JugniFoodGallery = () => {
     "/foods/GALLERY8.jpg",
     "/foods/download (1).jpg",
     "/foods/download (3).jpg",
-   
     "/foods/download (5).jpg",
   ];
 
-  // Get 5 images for the composition: active one + next 4
-  const getCompositionImages = () => {
-    return [
-      foodImages[activeIndex],
-      foodImages[(activeIndex + 1) % foodImages.length],
-      foodImages[(activeIndex + 2) % foodImages.length],
-      foodImages[(activeIndex + 3) % foodImages.length],
-      foodImages[(activeIndex + 4) % foodImages.length],
-    ];
-  };
-
-  const compImages = getCompositionImages();
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setImgIndex((prev) => (prev + 1) % foodImages.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <section
-      className="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden"
-      style={{ backgroundColor: "#EAB308" }}
+      className="relative py-24 md:py-40 overflow-visible"
     >
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-black/15 rounded-full blur-[200px]" />
-        <div className="absolute bottom-0 left-0 w-[40%] h-[40%] bg-dhaba-mustard/5 rounded-full blur-[180px]" />
-      </div>
+      {/* Tilted Background Layer */}
+      <div 
+        className="absolute inset-0 -skew-y-2 origin-left z-0"
+        style={{ backgroundColor: "#EAB308" }}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[60vh]">
-          <div className="text-center lg:text-left order-2 lg:order-1">
-            <motion.div
-              initial={{ opacity: 0, x: -60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <span className="font-serif italic text-dhaba-red/60 text-base md:text-lg tracking-[0.3em] uppercase block mb-6">The Art of Flavour</span>
-              <h2 className="font-display text-6xl sm:text-7xl md:text-[8rem] text-dhaba-dark leading-[0.85] tracking-tighter uppercase mb-8">
-                TASTE<br />
-                <span className="font-serif italic text-dhaba-red font-normal">the</span><br />
-                FIRE
-              </h2>
-              <div className="w-16 h-[1px] bg-dhaba-dark/20 mb-8 mx-auto lg:mx-0" />
-              <p className="text-dhaba-dark/60 text-sm md:text-base leading-relaxed max-w-sm mx-auto lg:mx-0 font-sans">
-                Slow-cooked over charcoal, spiced by hand, and served with soul. This is highway dining, reimagined.
-              </p>
-            </motion.div>
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Circular Overlapping Images with Auto-Rotation */}
+          <div className="relative order-2 lg:order-1 h-[450px] md:h-[600px] flex items-center justify-center">
+            <div className="relative w-full max-w-[550px] aspect-square scale-90 md:scale-100">
+              {/* Circle 1 */}
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[60%] aspect-square rounded-full overflow-hidden border-8 border-[#EAB308] z-10 shadow-2xl bg-[#EAB308]">
+                <AnimatePresence mode="popLayout">
+                  <motion.img
+                    key={foodImages[imgIndex]}
+                    src={foodImages[imgIndex]}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 1.5 }}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                </AnimatePresence>
+              </div>
+              {/* Circle 2 */}
+              <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[55%] aspect-square rounded-full overflow-hidden border-8 border-[#EAB308] z-20 shadow-2xl bg-[#EAB308]">
+                <AnimatePresence mode="popLayout">
+                  <motion.img
+                    key={foodImages[(imgIndex + 1) % foodImages.length]}
+                    src={foodImages[(imgIndex + 1) % foodImages.length]}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 1.5, delay: 0.2 }}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                </AnimatePresence>
+              </div>
+              {/* Circle 3 */}
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[50%] aspect-square rounded-full overflow-hidden border-8 border-[#EAB308] z-30 shadow-2xl bg-[#EAB308]">
+                <AnimatePresence mode="popLayout">
+                  <motion.img
+                    key={foodImages[(imgIndex + 2) % foodImages.length]}
+                    src={foodImages[(imgIndex + 2) % foodImages.length]}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 1.5, delay: 0.4 }}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                </AnimatePresence>
+              </div>
+            </div>
           </div>
-
-          <div className="relative order-1 lg:order-2">
-            <div className="relative w-full aspect-square max-w-[500px] mx-auto">
-              {/* Main Image */}
+            {/* Text Content */}
+            <div className="text-center lg:text-left order-1 lg:order-2">
               <motion.div
-                key={`main-${compImages[0]}`}
-                initial={{ opacity: 0, scale: 0.8, rotate: -4 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute inset-[5%] rounded-[2.5rem] overflow-hidden shadow-[0_40px_80px_-20px_rgba(0,0,0,0.6)] z-30 group"
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
               >
-                <img
-                  src={compImages[0]}
-                  alt="Jugni hero dish"
-                  className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-              </motion.div>
-
-              {/* Side Images */}
-              <motion.div
-                key={`side1-${compImages[1]}`}
-                initial={{ opacity: 0, scale: 0.8, rotate: 6 }}
-                animate={{ opacity: 1, scale: 1, rotate: 8 }}
-                transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute top-[-8%] right-[-8%] w-[55%] h-[60%] rounded-[2rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] z-20 group"
-              >
-                <img
-                  src={compImages[1]}
-                  alt="Jugni dish"
-                  className="w-full h-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-              </motion.div>
-
-              <motion.div
-                key={`side2-${compImages[2]}`}
-                initial={{ opacity: 0, scale: 0.8, rotate: -3 }}
-                animate={{ opacity: 1, scale: 1, rotate: -6 }}
-                transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute bottom-[-5%] left-[-8%] w-[50%] h-[55%] rounded-[2rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] z-20 group"
-              >
-                <img
-                  src={compImages[2]}
-                  alt="Jugni dish"
-                  className="w-full h-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-              </motion.div>
-
-              <motion.div
-                key={`side3-${compImages[3]}`}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute bottom-[10%] right-[-12%] w-[35%] h-[40%] rounded-full overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] z-10 border-[6px] border-white/10 group"
-              >
-                <img
-                  src={compImages[3]}
-                  alt="Jugni dish"
-                  className="w-full h-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-110"
-                />
-              </motion.div>
-
-              <motion.div
-                key={`side4-${compImages[4]}`}
-                initial={{ opacity: 0, scale: 0.8, rotate: 3 }}
-                animate={{ opacity: 1, scale: 1, rotate: 4 }}
-                transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute top-[8%] left-[-10%] w-[30%] h-[35%] rounded-[1.5rem] overflow-hidden shadow-[0_20px_40px_-10px_rgba(0,0,0,0.4)] z-10 group"
-              >
-                <img
-                  src={compImages[4]}
-                  alt="Jugni dish"
-                  className="w-full h-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent" />
+                <h2 className="font-display text-4xl md:text-6xl text-dhaba-dark uppercase tracking-tight mb-8">
+                  DHABA <span className="text-dhaba-red">SOUL</span>
+                </h2>
+                <p className="text-dhaba-dark/80 text-base md:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
+                  A dhaba by heart and soul, Highway Haven presents a profound selection of delicious desi and videshi dishes. Famous for our hand-stretched "parathas" topped with melting creamy butter and served with a steaming cup of hot chai, we bring you the ultimate highway comfort food experience.
+                </p>
               </motion.div>
             </div>
           </div>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="text-center mt-16 md:mt-24"
-        >
-         
-        </motion.div>
-      </div>
-
-      {/* Full Width Thumbnail Grid */}
-      <div className="hidden lg:block w-full px-12 mt-20 relative z-20">
-        <div className="grid grid-cols-6 gap-6">
-          {foodImages.map((src, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 50, rotate: i % 2 === 0 ? -2 : 2 }}
-              whileInView={{ opacity: 1, y: 0, rotate: i % 2 === 0 ? -1 : 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-              className="relative group cursor-pointer w-full"
-              style={{ perspective: 800 }}
-              onClick={() => setActiveIndex(i)}
-            >
-              <motion.div
-                animate={activeIndex === i ? { 
-                  scale: 1.05, 
-                  rotate: 0,
-                  y: -10,
-                  borderColor: "rgba(234, 179, 8, 1)",
-                  borderRadius: "9999px"
-                } : { 
-                  scale: 1, 
-                  rotate: i % 2 === 0 ? -1 : 1,
-                  y: 0,
-                  borderColor: "rgba(255, 255, 255, 0.1)",
-                  borderRadius: "24px"
-                }}
-                whileHover={{ 
-                  scale: 1.05, 
-                  rotate: 0, 
-                  y: -8,
-                  transition: { type: "spring", damping: 25, stiffness: 200 }
-                }}
-                className="overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] border-4 transition-all duration-300 aspect-[4/5]"
-              >
-                <img
-                  src={src}
-                  alt={`Jugni dish ${i + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-110"
-                />
-                <div className={`absolute inset-0 bg-gradient-to-t from-black/40 to-transparent transition-opacity duration-300 ${activeIndex === i ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`} />
-              </motion.div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Mobile View */}
-        <div className="lg:hidden -mx-4 overflow-hidden py-6 mt-12">
-          <div className="flex overflow-x-auto gap-4 px-4 pb-4 no-scrollbar">
-            {foodImages.map((src, i) => (
-              <div 
-                key={i} 
-                className="w-[180px] flex-shrink-0"
-                onClick={() => setActiveIndex(i)}
-              >
-                <div className={`overflow-hidden shadow-2xl transition-all duration-300 ${activeIndex === i ? 'ring-4 ring-dhaba-mustard ring-offset-4 ring-offset-[#a41c1c] scale-95 rounded-full' : 'rounded-[1.5rem]'} aspect-[4/5]`}>
-                  <img src={src} alt={`Jugni dish`} className="w-full h-full object-cover" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="text-center mt-16 md:mt-24"
-        >
-          <p className="font-serif italic text-dhaba-red text-lg md:text-2xl"> 
-            Crafted with passion, served with pride.
-          </p>
-        </motion.div>
-      </div>
-    </section>
+      </section>
   );
 };
 
@@ -829,14 +728,9 @@ const GroupBookings = () => {
         <div className="flex flex-col lg:flex-row items-center justify-evenly gap-16 lg:gap-24">
           {/* Text Content */}
           <div className="lg:w-1/2 max-w-2xl">
-            <div className="flex items-center gap-6 mb-10">
-              <div className="bg-dhaba-mustard p-4 rounded-3xl border-2 border-dhaba-dark shadow-lg">
-                <Users size={40} className="text-dhaba-dark" />
-              </div>
-              <div>
-                <span className="font-serif italic text-dhaba-mustard text-xl md:text-2xl block mb-1 underline decoration-dhaba-mustard decoration-2 underline-offset-8">Unforgettable Celebrations</span>
-                <h2 className="font-display text-5xl md:text-8xl uppercase tracking-tighter leading-none text-white pt-2">GROUP BOOKINGS</h2>
-              </div>
+            <div className="mb-10">
+              <span className="font-serif italic text-dhaba-mustard text-xl md:text-2xl block mb-4 underline decoration-dhaba-mustard decoration-2 underline-offset-8 w-fit">Unforgettable Celebrations</span>
+              <h2 className="font-display text-5xl md:text-8xl uppercase tracking-tighter leading-none text-white">GROUP BOOKINGS</h2>
             </div>
 
             <p className="text-lg md:text-2xl text-dhaba-cream/80 mb-12 leading-relaxed font-medium">
@@ -896,7 +790,6 @@ const GroupBookings = () => {
 interface Brand {
   name: string;
   logo: string;
-  brandLogo: string;
   subtitle: string;
 }
 
@@ -950,35 +843,17 @@ const BrandCard = ({ brand }: BrandCardProps) => {
         <motion.img
           src={brand.logo}
           alt={brand.name}
-          className="w-full h-full object-cover opacity-50 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700"
+          className="w-full h-full object-cover opacity-100 group-hover:scale-110 transition-all duration-700"
           referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-dhaba-dark via-dhaba-dark/40 to-transparent" />
       </div>
-
-      {brand.brandLogo && (
-        <div className="absolute top-5 left-5 z-10 rounded-2xl p-2.5 transition-all duration-300 group-hover:scale-110">
-          <img
-            src={brand.brandLogo}
-            alt={`${brand.name} logo`}
-            className="w-12 h-12 object-contain"
-            referrerPolicy="no-referrer"
-          />
-        </div>
-      )}
 
       {/* Content */}
       <div className="absolute inset-0 p-7 flex flex-col justify-end pointer-events-none text-left">
         <motion.div
           className="transition-transform duration-500"
         >
-          {/* Fixed height container for the title ensures baseline alignment */}
-          <div className="min-h-[4rem] flex flex-col justify-end transition-transform duration-500 group-hover:-translate-y-2 mb-1">
-            <h4 className="font-display font-bold text-lg sm:text-xl text-white drop-shadow-2xl leading-tight tracking-tight">
-              {brand.name}
-            </h4>
-          </div>
-
           <div
             className="opacity-100 mt-2 transition-all duration-500"
           >
@@ -1000,44 +875,37 @@ const Brands = () => {
   const brands = [
     {
       name: "Blue Tokai Coffee",
-      logo: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1000&auto=format&fit=crop",
-      brandLogo: "/resturents icons/blue tokai.png",
+      logo: "/Blue tokai HHd6.png",
       subtitle: "Freshly roasted specialty coffee"
     },
     {
       name: "Naivedyam",
-      logo: "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?q=80&w=1000&auto=format&fit=crop",
-      brandLogo: "/resturents icons/naivedham.png",
+      logo: "/Naivedyam HHd5.png",
       subtitle: "Authentic South Indian dining."
     },
     {
       name: "Chaayos",
-      logo: "https://cdn.sanity.io/images/gxmub2ol/redesign-2024/569562d2fda1de68b8cf6173e2d71dd0ebb9ec54-1194x1194.png/chaayos.png?rect=136,0,923,1194&w=320&h=414&fit=min&auto=format",
-      brandLogo: "/resturents icons/chayos.png",
+      logo: "/Chaayos HHd4.png",
       subtitle: "Experiments with Chai."
     },
     {
       name: "Uttham",
       logo: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?q=80&w=1000&auto=format&fit=crop",
-      brandLogo: "/resturents icons/uthham.png",
       subtitle: "Supreme Indian flavors and sweets."
     },
     {
       name: "Three Sixty Lux",
-      logo: "https://images.unsplash.com/photo-1547949003-9792a18a2601?q=80&w=1000&auto=format&fit=crop",
-      brandLogo: "/resturents icons/3060.jpg",
+      logo: "/three sixty HHd3.png",
       subtitle: "Luxury lounge and bar."
     },
     {
       name: "Chokhi Dhani",
-      logo: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1000&auto=format&fit=crop",
-      brandLogo: "/resturents icons/chokhi dhani.jpg",
+      logo: "/Chokhi dhani HHd2.png",
       subtitle: "Rajasthani cultural dining."
     },
     {
       name: "Guardian Pharmacy",
-      logo: "https://images.unsplash.com/photo-1586015555751-63bb77f4322a?q=80&w=1000&auto=format&fit=crop",
-      brandLogo: "/resturents icons/LOGO-1.png",
+      logo: "/gUARDIAN PHARMA d1.png",
       subtitle: "Your trusted wellness partner."
     }
   ];
@@ -1106,13 +974,10 @@ const Brands = () => {
         <div className="flex flex-col lg:flex-row items-center justify-evenly gap-12 md:gap-16">
           {/* Text Content */}
           <div className="w-full lg:w-1/2 max-w-2xl mb-12 lg:mb-0">
-            <div className="flex items-center gap-4 md:gap-6 mb-10 md:mb-12">
+            <div className="mb-10 md:mb-12">
               <h2 className="font-display text-4xl md:text-8xl tracking-tight uppercase leading-none text-dhaba-dark">
                 GET IN <span className="text-dhaba-red">TOUCH</span>
               </h2>
-              <div className="bg-white/40 p-3 md:p-4 border-2 border-dhaba-red">
-                <Users size={32} className="md:w-10 md:h-10 text-dhaba-red" />
-              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-6 md:gap-12 mb-12 md:mb-16">
@@ -1216,17 +1081,18 @@ const Footer = () => {
 
 export default function App() {
   return (
-    <div className="min-h-screen font-sans selection:bg-dhaba-red selection:text-white overflow-x-hidden">
+    <div className="min-h-screen flex flex-col font-sans selection:bg-dhaba-red selection:text-white overflow-x-hidden">
       <Nav />
-      <main>
+      <main className="flex-grow">
         <Hero />
-        <Brands />
-          <JugniFoodGallery />
-        <ReviewsMarquee />
+        <RoadDivider />
+        <LoungeSection />
         <RoadDivider />
         <Highlights />
         <RoadDivider />
-        <LoungeSection />
+        <Brands />
+        <JugniFoodGallery />
+        <ReviewsMarquee />
         <RoadDivider />
         <JugniSection />
         <GroupBookings />
